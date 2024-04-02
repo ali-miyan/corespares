@@ -19,6 +19,7 @@ adminRoute.use(express.urlencoded({ extended: true }));
 adminRoute.set("views", "./views/admin");
 
 adminRoute.get('/',admincontrollers.loadAdminLogin);
+adminRoute.post('/admin-login',admincontrollers.adminLogin)
 adminRoute.get('/dashboard',admincontrollers.loadDashboard);
 
 
