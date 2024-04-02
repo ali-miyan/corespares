@@ -18,6 +18,8 @@ adminRoute.use(express.urlencoded({ extended: true }));
 // Set the view engine and views directory
 adminRoute.set("views", "./views/admin");
 
-adminRoute.get('/',admincontrollers.loadadminlogin);
+adminRoute.get('/',admincontrollers.loadAdminLogin);
+adminRoute.get('/dashboard',admincontrollers.loadDashboard);
+
 
 module.exports = adminRoute;
