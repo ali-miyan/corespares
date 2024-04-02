@@ -1,4 +1,4 @@
-const loadadminlogin = async (req, res) => {
+const loadAdminLogin = async (req, res) => {
   try {
     res.render("admin-login");
   } catch (error) {
@@ -6,6 +6,15 @@ const loadadminlogin = async (req, res) => {
   }
 };
 
+const loadDashboard = async (req, res) => {
+    try {
+      res.render("dashboard");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 module.exports = {
-  loadadminlogin,
+    loadAdminLogin,
+    loadDashboard
 };
