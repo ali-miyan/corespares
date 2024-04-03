@@ -17,9 +17,14 @@ app.set('view engine', 'ejs');
 
 app.use(noCache());
 
+// Parse JSON and URL-encoded data
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
 // User Routes
-// const userRoute = require('./routes/userroute');
-// app.use('/', userRoute);
+const userRoute = require('./routes/userRoute');
+app.use('/', userRoute);
 
 // Admin Routes
 const adminRoute = require('./routes/adminRoute');
