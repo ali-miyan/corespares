@@ -1,1 +1,116 @@
 <%- include('../partials/admin-partial.ejs') -%>
+<section class="content-main">
+    <div class="row">
+        <div class="col-9">
+            <div class="content-header">
+                <h2 class="content-title">Add New Category</h2>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Basic</h4>
+                </div>
+                <div class="card-body">
+                    <form id="category-form" enctype="multipart/form-data">
+                        <div class="mb-4">
+                            <label for="product_name" class="form-label">Category title</label>
+                            <input type="text" placeholder="Type here" name="title" class="form-control"
+                                id="title" />
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Full description</label>
+                            <textarea placeholder="Type here" name="description" id="description"
+                                class="form-control" rows="4"></textarea>
+                        </div>
+
+                        <div>
+                            <button type="button" onclick="submitCategory()"
+                                class="btn btn-md rounded font-sm hover-up">ADD</button>
+                        </div>
+                </div>
+            </div>
+            <!-- card end// -->
+        </div>
+        <div class="col-lg-3">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Media</h4>
+                </div>
+                <div class="card-body">
+                    <div class="input-upload">
+                        <img src="/public/assets/imgs/theme/upload.svg" alt="" />
+                        <input class="form-control" type="file" id="imageFile" name="image" />
+                    </div>
+                </div>
+            </div>
+            <!-- card end// -->
+        </div>
+        </form>
+    </div>
+</section>
+
+<!-- content-main end// -->
+<footer class="main-footer font-xs">
+    <div class="row pb-30 pt-15">
+        <div class="col-sm-6">
+            <script>
+                document.write(new Date().getFullYear());
+            </script>
+            &copy; Nest - HTML Ecommerce Template .
+        </div>
+        <div class="col-sm-6">
+            <div class="text-sm-end">All rights reserved</div>
+        </div>
+    </div>
+</footer>
+</main>
+<script src="/public/assets/js/vendors/jquery-3.6.0.min.js"></script>
+<script src="/public/assets/js/vendors/bootstrap.bundle.min.js"></script>
+<script src="/public/assets/js/vendors/select2.min.js"></script>
+<script src="/public/assets/js/vendors/perfect-scrollbar.js"></script>
+<script src="/public/assets/js/vendors/jquery.fullscreen.min.js"></script>
+<!-- Main Script -->
+<script src="/public/assets/js/main.js?v=1.1" type="text/javascript"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+
+    function submitCategory() {
+        const title = $('#title').val();
+        const description = $('#description').val();
+        const imageFileInput = document.getElementById('imageFile');
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('description', description);
+
+        if (imageFileInput.files.length > 0) {
+            formData.append('image', imageFileInput.files[0]);
+        }
+
+        fetch('/admin/add-category', {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    Swal.fire({
+                        title: "Succed!",
+                        text: "Category added successfully!",
+                        icon: "success"
+                    }).then((res)=>{
+                        location.href = '/admin/category'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }
+
+</script>
+
+</body>
+
+</html>

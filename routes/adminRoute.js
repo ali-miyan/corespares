@@ -2,6 +2,7 @@ const express = require("express");
 const adminRoute = express();
 const session = require("express-session");
 const admincontrollers = require('../controller/adminController');
+const multer = require('../middleware/multer')
 
 adminRoute.use(
   session({
@@ -20,7 +21,10 @@ adminRoute.set("views", "./views/admin");
 
 adminRoute.get('/',admincontrollers.loadAdminLogin);
 adminRoute.post('/admin-login',admincontrollers.adminLogin)
-adminRoute.get('/dashboard',admincontrollers.loadDashboard);
+adminRoute.get('/category',admincontrollers.loadCategory);
+adminRoute.get('/add-category',admincontrollers.addCategory);
+adminRoute.post('/add-category',multer.uploadproduct,admincontrollers.addCategoryPost);
+
 
 
 module.exports = adminRoute;

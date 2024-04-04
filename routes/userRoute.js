@@ -16,7 +16,7 @@ userRoute.use(
 userRoute.set("views", "./views/user");
 
 userRoute.get('/',userController.loadUserHome);
-userRoute.get('/dashboard',userController.loadUserShop);
+userRoute.get('/shop',userController.loadUserShop);
 
 
 module.exports = userRoute;
