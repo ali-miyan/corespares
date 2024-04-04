@@ -1,4 +1,4 @@
-const categoryModel = require('../models/category-model')
+const categoryModel = require("../models/category-model");
 const dotenv = require("dotenv").config();
 
 const loadAdminLogin = async (req, res) => {
@@ -15,9 +15,9 @@ const adminLogin = async (req, res) => {
     if (password === process.env.password && email === process.env.email) {
       res.json({ success: true });
     } else if (password !== process.env.password) {
-      res.json({ wrongPass: true })
+      res.json({ wrongPass: true });
     } else if (email !== process.env.email) {
-      res.json({ wrongEmail: true })
+      res.json({ wrongEmail: true });
     }
   } catch (error) {
     console.log(error);
@@ -26,43 +26,49 @@ const adminLogin = async (req, res) => {
 
 const loadCategory = async (req, res) => {
   try {
-    const categories = await categoryModel.find({is_blocked:false})
-    res.render("category",{categories});
+    const categories = await categoryModel.find({ is_blocked: false });
+    res.render("category", { categories });
   } catch (error) {
     console.log(error);
   }
 };
 
-const addCategory = async(req,res) => {
+const addCategory = async (req, res) => {
   try {
     res.render("add-category");
   } catch (error) {
     console.log(error);
   }
-}
+};
+
 
 const addCategoryPost = async (req, res) => {
   try {
     const { title, description } = req.body;
-    console.log(req.body,title,'ddddddd');
-    const imageUrl = req.file ? req.file.filename : '';
-    console.log(req.file.filename, 'fffffffillllllllll');
-    const newProduct = new categoryModel({
-      title:title,
-      description:description,
-      imageUrl:imageUrl
+    const imageUrl = req.file.originalname;
+
+    const existingCategory = await categoryModel.findOne({ title: { $regex: new RegExp(title, 'i') } });
+    if (existingCategory) {
+      res.json({exits:true})
+    }
+    const newCategory = new categoryModel({
+      title,
+      description,
+      imageUrl
     });
-    await newProduct.save();
-    res.json({ok:true, message: 'Product created successfully!' });
+    await newCategory.save();
+    res.json({ ok: true, message: "Category created successfully" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Error creating product' });
   }
 };
+
+
+
 module.exports = {
   loadAdminLogin,
   adminLogin,
   loadCategory,
   addCategoryPost,
-  addCategory
+  addCategory,
 };

@@ -12,25 +12,24 @@
                     <h4>Basic</h4>
                 </div>
                 <div class="card-body">
-                    <form id="category-form" enctype="multipart/form-data">
+                    <form id="category-form"  enctype="multipart/form-data">
                         <div class="mb-4">
                             <label for="product_name" class="form-label">Category title</label>
-                            <input type="text" placeholder="Type here" name="title" class="form-control"
-                                id="title" />
+                            <input type="text" placeholder="Type here" name="title" class="form-control" id="title" />
+                            <span id="title-error" style="color: red;"></span>
                         </div>
                         <div class="mb-4">
                             <label class="form-label">Full description</label>
-                            <textarea placeholder="Type here" name="description" id="description"
-                                class="form-control" rows="4"></textarea>
+                            <textarea placeholder="Type here" name="description" id="description" class="form-control" rows="4"></textarea>
+                            <span id="desc-error" style="color: red;"></span>
                         </div>
 
                         <div>
-                            <button type="button" onclick="submitCategory()"
-                                class="btn btn-md rounded font-sm hover-up">ADD</button>
+                            <button type="button" onclick="submitCategory()"  class="btn btn-md rounded font-sm hover-up">ADD</button>
+                            <button type="button" style="border: none; background: none;" > <a href="/admin/category" class="btn btn-md rounded font-sm hover-up">Back</a></button>
                         </div>
                 </div>
             </div>
-            <!-- card end// -->
         </div>
         <div class="col-lg-3">
             <div class="card mb-4">
@@ -39,18 +38,20 @@
                 </div>
                 <div class="card-body">
                     <div class="input-upload">
-                        <img src="/public/assets/imgs/theme/upload.svg" alt="" />
-                        <input class="form-control" type="file" id="imageFile" name="image" />
+                        <input class="form-control" type="file" id="imageFile" name="image" onchange="previewImage(this, 'previewImage')" />
+                        <span style="color: red;" id="image-error"></span>
                     </div>
+                    <div id="previewImage" style="margin-top: 10px;"></div>
                 </div>
             </div>
-            <!-- card end// -->
+            
+            
         </div>
-        </form>
+    </form>
     </div>
 </section>
 
-<!-- content-main end// -->
+
 <footer class="main-footer font-xs">
     <div class="row pb-30 pt-15">
         <div class="col-sm-6">
@@ -59,8 +60,10 @@
             </script>
             &copy; Nest - HTML Ecommerce Template .
         </div>
-        <div class="col-sm-6">
-            <div class="text-sm-end">All rights reserved</div>
+        <div class="ctitle
+        title   ol-sm-6">
+            <div clastitle
+            titles="text-sm-end">All rights reserved</div>
         </div>
     </div>
 </footer>
@@ -75,42 +78,107 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+function submitCategory() { 
 
-    function submitCategory() {
-        const title = $('#title').val();
-        const description = $('#description').val();
-        const imageFileInput = document.getElementById('imageFile');
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('description', description);
+    const title = document.getElementById("title").value;
+    const titError = document.getElementById("title-error")
+    const description = document.getElementById("description").value;
+    const descError = document.getElementById("desc-error")
+    const image = document.getElementById('imageFile');
+    const imgError = document.getElementById("image-error")
 
-        if (imageFileInput.files.length > 0) {
-            formData.append('image', imageFileInput.files[0]);
-        }
-
-        fetch('/admin/add-category', {
-            method: 'POST',
-            body: formData,
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.ok) {
-                    Swal.fire({
-                        title: "Succed!",
-                        text: "Category added successfully!",
-                        icon: "success"
-                    }).then((res)=>{
-                        location.href = '/admin/category'
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
+    if(title.trim()==""){
+        titError.textContent = "Title is required!";
+        clearError(titError, 2500);
+        return; 
     }
+    if(description.trim()==""){
+        descError.textContent = "Description is required!";
+        clearError(descError, 2500);
+        return; 
+    }
+    if(image.files.length === 0){
+        imgError.textContent = "Image is required!";
+        clearError(imgError, 2500);
+        return; 
+    }
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('image', image.files[0]);
+
+    fetch('/admin/add-category', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.ok) {
+            Swal.fire({
+                title: "Success!",
+                text: "Category added successfully!",
+                icon: "success"
+            }).then(() => {
+                location.href = '/admin/category';
+            });
+        }else if(data.exits){
+        titError.textContent = "This title already exists!";
+        clearError(titError, 2500);
+        return; 
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching data:', error);
+    });
+}
+
+function clearError(element, time) {
+        setTimeout(() => (element.textContent = ""), time);
+      }
+
+      function previewImage(input, previewId) {
+    const preview = document.getElementById(previewId);
+    const file = input.files[0];
+
+    preview.innerHTML = '';
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            const image = new Image();
+            image.src = e.target.result;
+            image.style.maxWidth = '100%';
+
+            const container = document.createElement('div');
+            container.style.position = 'relative'; 
+
+            container.appendChild(image);
+            const removeIcon = document.createElement('i');
+            removeIcon.className = 'class="icon material-icons md-close';
+            removeIcon.style.backgroundColor = 'white'; 
+            removeIcon.style.position = 'absolute'; 
+            removeIcon.style.top = '5px'; 
+            removeIcon.style.right = '5px';
+            removeIcon.style.cursor = 'pointer'; 
+            removeIcon.style.borderRadius = '50%';
+            removeIcon.onclick = function() {
+                preview.innerHTML = ''; 
+                input.value = ''; 
+            };
+
+            container.appendChild(removeIcon);
+
+            preview.appendChild(container);
+        };
+
+        reader.readAsDataURL(file);
+    }
+}
 
 </script>
 
 </body>
 
-</html>
+</html>                            
