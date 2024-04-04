@@ -4,6 +4,7 @@ const path = require('path');
 const noCache = require('nocache');
 require('dotenv').config();
 const Config=require('./config/config')
+Config.connectDB()
 
 // Set up Express application
 const app = express();
