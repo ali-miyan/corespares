@@ -26,7 +26,7 @@ const adminLogin = async (req, res) => {
 
 const loadCategory = async (req, res) => {
   try {
-    const categories = await categoryModel.find({ is_blocked: false });
+    const categories = await categoryModel.find({});
     res.render("category", { categories });
   } catch (error) {
     console.log(error);
@@ -66,22 +66,34 @@ const addCategoryPost = async (req, res) => {
 
 const deleteCategory = async (req, res) => {
   try {
-
-    const id = req.body.productId
-    const deleted = await categoryModel.deleteOne({_id:id})
-    if(deleted){
-      res.json({ok:true})
+    const id = req.body.productId;
+    const deleted = await categoryModel.deleteOne({ _id: id });
+    if (deleted) {
+      res.json({ ok: true });
     }
   } catch (error) {
     console.log(error);
   }
 };
 
+const categoryStatus = async (req, res) => {
+  try {
+    const { categoryId, isBlocked } = req.body;
+    const category = await categoryModel.updateOne(
+      { _id: categoryId },
+      { is_blocked: isBlocked }
+    );
+    console.log(category, "got is", isBlocked);
+  } catch (error) {
+    console.log(error);
+  }
+};
 module.exports = {
   loadAdminLogin,
   adminLogin,
   loadCategory,
   addCategoryPost,
   addCategory,
-  deleteCategory
+  deleteCategory,
+  categoryStatus,
 };

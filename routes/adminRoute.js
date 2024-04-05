@@ -29,5 +29,7 @@ adminRoute.post(
   admincontrollers.addCategoryPost
 );
 adminRoute.delete("/delete-category", admincontrollers.deleteCategory);
+adminRoute.patch('/category-status',admincontrollers.categoryStatus)
+
 
 module.exports = adminRoute;

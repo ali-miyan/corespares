@@ -1,4 +1,5 @@
 <%- include('../partials/admin-partial.ejs') -%>
+
     <section class="content-main">
         <div class="content-header">
             <div>
@@ -105,13 +106,12 @@ input:checked + .slider:before {
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <div class="switch">
                         <label>
-                            <input  type="checkbox">
-                        
+                            <input type="checkbox" <%= product.is_blocked ? "checked" : "" %> data-product-id="<%= product.id %>" id="blockToggle">
                             <span class="slider round"></span>
                         </label>
                     </div>
                     <div class="icon-container d-flex">
-                        <button class="btn btn-md rounded font-sm hover-up me-2">
+                        <button class="btn btn-md rounded font-sm hover-up me-2" onclick="editCategory('<%=product.title%>','<%=product.description%>','<%=product.imageUrl%>')" data-toggle="modal" data-target="#exampleModalCenter">
                             <i class="material-icons md-edit "></i>
                         </button>
                         <button id="showalert" onclick="confirmDelete('<%= product._id %>')" class="btn btn-md rounded font-sm hover-up">
@@ -124,7 +124,55 @@ input:checked + .slider:before {
     </div>
     <% }) %>
 </div>
+
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="category-form" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label for="title" class="form-label">Category Title</label>
+                            <input type="text" class="form-control" id="title" name="title" placeholder="Type here">
+                            <span id="title-error" style="color: red;"></span>
+                        </div>
+                        <div class="mb-4">
+                            <label for="description" class="form-label">Full Description</label>
+                            <textarea class="form-control" id="description" name="description" placeholder="Type here" rows="4"></textarea>
+                            <span id="desc-error" style="color: red;"></span>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="input-upload">
+                            <input type="file" class="form-control" id="imageFile" name="image" >
+                            <span style="color: red;" id="image-error"></span>
+                        </div>
+                        <div id="previewImage" style="margin-top: 10px;"></div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" onclick="submitCategory()" class="btn btn-primary">Save Changes</button>
+                    <!-- <button type="button" style="border: none; background: none;">
+                        <a href="/admin/category" class="btn btn-md rounded font-sm hover-up">Back</a>
+                    </button> -->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
         
+</section>
+</main>
 
 <script>
     function confirmDelete(productId) {
@@ -161,11 +209,79 @@ input:checked + .slider:before {
         console.error('Error deleting category:', error);
     });
 }
-
   </script>
-        
-    </section>
-    </main>
+
+<script>
+function editCategory(title,description,imageUrl){
+    console.log(title,description,imageUrl);
+    document.getElementById('title').value = title;
+    document.getElementById('description').value = description;
+    var previewImageElement = document.getElementById('previewImage');
+    
+    previewImageElement.innerHTML = '';
+
+    var img = document.createElement('img');
+    img.src = '/categoryimages/' + encodeURIComponent(imageUrl); // Prepend a forward slash to the path
+    console.log(img.src );
+    img.style.maxWidth = '100%';
+    img.style.maxHeight = '200px'; 
+    // previewImageElement.appendChild(img);
+
+}
+
+
+function submitCategory(){
+    const title = document.getElementById('title').value 
+    const description = document.getElementById('description').value
+    console.log(title,description);
+}
+</script>
+
+<script>
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Get the block toggle checkbox
+    var blockToggle = document.getElementById('blockToggle');
+
+    // Add event listener for change event
+    blockToggle.addEventListener('change', function() {
+        // Check if the checkbox is checked or unchecked
+        var isBlocked = blockToggle.checked;
+
+        // Get the product ID from the data attribute
+        var productId = blockToggle.getAttribute('data-product-id');
+
+        // Send a request to update the block/unblock status
+        updateBlockStatus(productId, isBlocked);
+    });
+
+    function updateBlockStatus(productId, isBlocked) {
+        fetch('/admin/category-status', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                categoryId: productId,
+                isBlocked: isBlocked
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Block status updated successfully');
+            } else {
+                console.error('Failed to update block status');
+            }
+        })
+        .catch(error => {
+            console.error('Error updating block status:', error);
+        });
+    }
+});
+
+</script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="/public/assets/js/vendors/jquery-3.6.0.min.js"></script>
