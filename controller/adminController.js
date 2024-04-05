@@ -41,20 +41,21 @@ const addCategory = async (req, res) => {
   }
 };
 
-
 const addCategoryPost = async (req, res) => {
   try {
     const { title, description } = req.body;
     const imageUrl = req.file.originalname;
 
-    const existingCategory = await categoryModel.findOne({ title: { $regex: new RegExp(title, 'i') } });
+    const existingCategory = await categoryModel.findOne({
+      title: { $regex: new RegExp(title, "i") },
+    });
     if (existingCategory) {
-      res.json({exits:true})
+      res.json({ exits: true });
     }
     const newCategory = new categoryModel({
       title,
       description,
-      imageUrl
+      imageUrl,
     });
     await newCategory.save();
     res.json({ ok: true, message: "Category created successfully" });
@@ -63,7 +64,18 @@ const addCategoryPost = async (req, res) => {
   }
 };
 
+const deleteCategory = async (req, res) => {
+  try {
 
+    const id = req.body.productId
+    const deleted = await categoryModel.deleteOne({_id:id})
+    if(deleted){
+      res.json({ok:true})
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 module.exports = {
   loadAdminLogin,
@@ -71,4 +83,5 @@ module.exports = {
   loadCategory,
   addCategoryPost,
   addCategory,
+  deleteCategory
 };
