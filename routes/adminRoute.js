@@ -4,7 +4,9 @@ const session = require("express-session");
 const admincontrollers = require("../controller/adminController");
 const productController = require("../controller/productController");
 const multer = require("../middleware/multer");
+const auth = require('../middleware/auth')
 const multerproduct = require("../middleware/multer-product");
+
 
 adminRoute.use(
   session({
@@ -21,6 +23,14 @@ adminRoute.use(express.urlencoded({ extended: true }));
 // Set the view engine and views directory
 adminRoute.set("views", "./views/admin");
 
+adminRoute.get("/",auth.isLogout, admincontrollers.loadAdminLogin);
+adminRoute.post("/admin-login",auth.isLogout,admincontrollers.adminLogin);
+adminRoute.get("/category", auth.isLogin,admincontrollers.loadCategory);
+adminRoute.get("/add-category",auth.isLogin, admincontrollers.addCategory);
+adminRoute.post("/add-category", auth.isLogin,admincontrollers.addCategoryPost);
+adminRoute.delete("/delete-category",auth.isLogin, admincontrollers.deleteCategory);
+adminRoute.patch('/category-status', auth.isLogin,admincontrollers.categoryStatus)
+adminRoute.get('/admin-logout',admincontrollers.adminLogout)
 adminRoute.get("/", admincontrollers.loadAdminLogin);
 adminRoute.post("/admin-login", admincontrollers.adminLogin);
 adminRoute.get("/category", admincontrollers.loadCategory);

@@ -12,7 +12,8 @@ const loadAdminLogin = async (req, res) => {
 const adminLogin = async (req, res) => {
   try {
     const { password, email } = req.body;
-    if (password === process.env.password && email === process.env.email) {
+    if (password === process.env.password && email === process.env.gmail) {
+      req.session.email = email;
       res.json({ success: true });
     } else if (password !== process.env.password) {
       res.json({ wrongPass: true });
@@ -26,7 +27,7 @@ const adminLogin = async (req, res) => {
 
 const loadCategory = async (req, res) => {
   try {
-    const categories = await categoryModel.find({ is_blocked: false });
+    const categories = await categoryModel.find({});
     res.render("category", { categories });
   } catch (error) {
     console.log(error);
@@ -66,16 +67,36 @@ const addCategoryPost = async (req, res) => {
 
 const deleteCategory = async (req, res) => {
   try {
-
-    const id = req.body.productId
-    const deleted = await categoryModel.deleteOne({_id:id})
-    if(deleted){
-      res.json({ok:true})
+    const id = req.body.productId;
+    const deleted = await categoryModel.deleteOne({ _id: id });
+    if (deleted) {
+      res.json({ ok: true });
     }
   } catch (error) {
     console.log(error);
   }
 };
+
+const categoryStatus = async (req, res) => {
+  try {
+    const { categoryId, isBlocked } = req.body;
+    await categoryModel.updateOne(
+      { _id: categoryId },
+      { is_blocked: isBlocked }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const adminLogout = async (req, res) => {
+  try {
+      req.session.destroy();
+      res.redirect('/admin');
+  } catch (error) {
+      console.log(error.message);
+  }
+}
 
 module.exports = {
   loadAdminLogin,
@@ -83,5 +104,7 @@ module.exports = {
   loadCategory,
   addCategoryPost,
   addCategory,
-  deleteCategory
+  deleteCategory,
+  categoryStatus,
+  adminLogout
 };

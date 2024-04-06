@@ -7,78 +7,20 @@
                 
                 <div class="cat-blocks-container">
                     <div class="row">
-                        <div class="col-6 col-sm-4 col-lg-2">
-                            <a href="category.html" class="cat-block">
-                                <figure>
-                                    <span>
-                                        <img src="/public/asset/images/demos/demo-4/cats/1.png" alt="Category image">
-                                    </span>
-                                </figure>
-
-                                <h3 class="cat-block-title">Computer & Laptop</h3><!-- End .cat-block-title -->
-                            </a>
-                        </div><!-- End .col-sm-4 col-lg-2 -->
-
-                        <div class="col-6 col-sm-4 col-lg-2">
-                            <a href="category.html" class="cat-block">
-                                <figure>
-                                    <span>
-                                        <img src="/public/asset/images/img04.jpg" alt="Category image">
-                                    </span>
-                                </figure>
-
-                                <h3 class="cat-block-title">Digital Cameras</h3><!-- End .cat-block-title -->
-                            </a>
-                        </div><!-- End .col-sm-4 col-lg-2 -->
-
-                        <div class="col-6 col-sm-4 col-lg-2">
-                            <a href="category.html" class="cat-block">
-                                <figure>
-                                    <span>
-                                        <img src="/public/asset/images/demos/demo-4/cats/3.png" alt="Category image">
-                                    </span>
-                                </figure>
-
-                                <h3 class="cat-block-title">Smart Phones</h3><!-- End .cat-block-title -->
-                            </a>
-                        </div><!-- End .col-sm-4 col-lg-2 -->
-
-                        <div class="col-6 col-sm-4 col-lg-2">
-                            <a href="category.html" class="cat-block">
-                                <figure>
-                                    <span>
-                                        <img src="/public/asset/images/demos/demo-4/cats/4.png" alt="Category image">
-                                    </span>
-                                </figure>
-
-                                <h3 class="cat-block-title">Televisions</h3><!-- End .cat-block-title -->
-                            </a>
-                        </div><!-- End .col-sm-4 col-lg-2 -->
-
-                        <div class="col-6 col-sm-4 col-lg-2">
-                            <a href="category.html" class="cat-block">
-                                <figure>
-                                    <span>
-                                        <img src="/public/asset/images/demos/demo-4/cats/5.png" alt="Category image">
-                                    </span>
-                                </figure>
-
-                                <h3 class="cat-block-title">Audio</h3><!-- End .cat-block-title -->
-                            </a>
-                        </div><!-- End .col-sm-4 col-lg-2 -->
-
-                        <div class="col-6 col-sm-4 col-lg-2">
-                            <a href="category.html" class="cat-block">
-                                <figure>
-                                    <span>
-                                        <img src="/public/asset/images/demos/demo-4/cats/6.png" alt="Category image">
-                                    </span>
-                                </figure>
-
-                                <h3 class="cat-block-title">Smart Watches</h3><!-- End .cat-block-title -->
-                            </a>
-                        </div><!-- End .col-sm-4 col-lg-2 -->
-                    </div><!-- End .row -->
+                        <% category.forEach(function(category) { %>
+                            <div class="col-6 col-sm-4 col-lg-2">
+                                <a href="category.html" class="cat-block">
+                                    <figure>
+                                        <span>
+                                            <img src="/public/categoryimages/<%= category.imageUrl %>" alt="Category image">
+                                        </span>
+                                    </figure>
+    
+                                    <h3 class="cat-block-title"><%=category.title%></h3><!-- End .cat-block-title -->
+                                </a>
+                            </div><!-- End .col-sm-4 col-lg-2 -->
+                            <% }) %>
+                        </div><!-- End .row -->
                 </div><!-- End .cat-blocks-container -->
             </div><!-- End .container -->
 
@@ -88,7 +30,6 @@
     </div><!-- End .page-wrapper -->
     <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
 
-    <!-- Mobile Menu -->
     <div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
 
     <div class="mobile-menu-container mobile-menu-light">
