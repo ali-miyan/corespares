@@ -12,7 +12,8 @@ const loadAdminLogin = async (req, res) => {
 const adminLogin = async (req, res) => {
   try {
     const { password, email } = req.body;
-    if (password === process.env.password && email === process.env.email) {
+    if (password === process.env.password && email === process.env.gmail) {
+      req.session.email = email;
       res.json({ success: true });
     } else if (password !== process.env.password) {
       res.json({ wrongPass: true });
@@ -79,15 +80,24 @@ const deleteCategory = async (req, res) => {
 const categoryStatus = async (req, res) => {
   try {
     const { categoryId, isBlocked } = req.body;
-    const category = await categoryModel.updateOne(
+    await categoryModel.updateOne(
       { _id: categoryId },
       { is_blocked: isBlocked }
     );
-    console.log(category, "got is", isBlocked);
   } catch (error) {
     console.log(error);
   }
 };
+
+const adminLogout = async (req, res) => {
+  try {
+      req.session.destroy();
+      res.redirect('/admin');
+  } catch (error) {
+      console.log(error.message);
+  }
+}
+
 module.exports = {
   loadAdminLogin,
   adminLogin,
@@ -96,4 +106,5 @@ module.exports = {
   addCategory,
   deleteCategory,
   categoryStatus,
+  adminLogout
 };
