@@ -1,7 +1,7 @@
 const express = require("express");
 const userRoute = express();
 const session = require("express-session");
-const userController = require('../controller/userController');
+const userController = require("../controller/userController");
 
 userRoute.use(
   session({
@@ -11,12 +11,12 @@ userRoute.use(
   })
 );
 
-
 // Set the view engine and views directory
 userRoute.set("views", "./views/user");
 
-userRoute.get('/',userController.loadUserHome);
-userRoute.get('/shop',userController.loadUserShop);
+userRoute.get("/", userController.loadUserHome);
+userRoute.get("/shop/:id", userController.loadUserShop);
+userRoute.get("/product-details/:id", userController.loadProductDetails);
 
 
 module.exports = userRoute;
