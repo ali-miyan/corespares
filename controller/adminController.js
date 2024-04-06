@@ -17,7 +17,7 @@ const adminLogin = async (req, res) => {
       res.json({ success: true });
     } else if (password !== process.env.password) {
       res.json({ wrongPass: true });
-    } else if (email !== process.env.email) {
+    } else if (email !== process.env.gmail) {
       res.json({ wrongEmail: true });
     }
   } catch (error) {
@@ -38,20 +38,21 @@ const addCategory = async (req, res) => {
   try {
     res.render("add-category");
   } catch (error) {
-    console.log(error);
+    console.log(error); 
   }
 };
 
 const addCategoryPost = async (req, res) => {
   try {
     const { title, description } = req.body;
-    const imageUrl = req.file.originalname;
+    const imageUrl = req.file.filename;
 
     const existingCategory = await categoryModel.findOne({
       title: { $regex: new RegExp(title, "i") },
     });
+    existingCategory
     if (existingCategory) {
-      res.json({ exits: true });
+      return res.json({ exits: true });
     }
     const newCategory = new categoryModel({
       title,
@@ -59,7 +60,7 @@ const addCategoryPost = async (req, res) => {
       imageUrl,
     });
     await newCategory.save();
-    res.json({ ok: true, message: "Category created successfully" });
+    return res.json({ ok: true, message: "Category created successfully" });
   } catch (err) {
     console.error(err);
   }

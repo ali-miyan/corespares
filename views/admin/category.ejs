@@ -268,12 +268,14 @@
 
     <script>
       function editCategory(title, description, imageUrl) {
+        console.log(imageUrl,'imageurllll');
         document.getElementById("title").value = title;
     document.getElementById("description").value = description;
 
      // Set image src
      var image = document.getElementById('category-image');
-    image.src = '/public/asset/' + imageUrl; 
+     console.log(image);
+    image.src = '/public/categoryimages/' + imageUrl; 
       }
 
       function submitCategory() {

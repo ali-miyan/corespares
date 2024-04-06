@@ -1,171 +1,177 @@
 <%- include('../partials/category-partial.ejs') -%>
-            
-            <section class="content-main">
-    <div class="row">
-        <div class="col-9">
-            <div class="content-header">
-                <h2 class="content-title">Add New Category</h2>
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h4>Basic</h4>
-                </div>
-                <div class="card-body">
-                    <form id="category-form"  enctype="multipart/form-data">
-                        <div class="mb-4">
-                            <label for="product_name" class="form-label">Category title</label>
-                            <input type="text" placeholder="Type here" name="title" class="form-control" id="title" />
-                            <span id="title-error" style="color: red;"></span>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">Full description</label>
-                            <textarea placeholder="Type here" name="description" id="description" class="form-control" rows="4"></textarea>
-                            <span id="desc-error" style="color: red;"></span>
-                        </div>
 
-                        <div>
-                            <button type="button" onclick="submitCategory()"  class="btn btn-md rounded font-sm hover-up">Add</button>
-                            <button type="button" style="border: none; background: none;" > <a href="/admin/category" class="btn btn-md rounded font-sm hover-up">Back</a></button>
-                        </div>
+    <section class="content-main">
+        <div class="row">
+            <div class="col-9">
+                <div class="content-header">
+                    <h2 class="content-title">Add New Category</h2>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h4>Media</h4>
-                </div>
-                <div class="card-body">
-                    <div class="input-upload">
-                        <input class="form-control" type="file" id="imageFile" name="image" onchange="previewImage(this, 'previewImage')" />
-                        <span style="color: red;" id="image-error"></span>
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Basic</h4>
                     </div>
-                    <div id="previewImage" style="margin-top: 10px;"></div>
+                    <div class="card-body">
+                        <form id="category-form" enctype="multipart/form-data">
+                            <div class="mb-4">
+                                <label for="product_name" class="form-label">Category title</label>
+                                <input type="text" placeholder="Type here" name="title" class="form-control"
+                                    id="title" />
+                                <span id="title-error" style="color: red;"></span>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Full description</label>
+                                <textarea placeholder="Type here" name="description" id="description"
+                                    class="form-control" rows="4"></textarea>
+                                <span id="desc-error" style="color: red;"></span>
+                            </div>
+
+                            <div>
+                                <button type="button" onclick="submitCategory()"
+                                    class="btn btn-md rounded font-sm hover-up">Add</button>
+                                <button type="button" style="border: none; background: none;"> <a href="/admin/category"
+                                        class="btn btn-md rounded font-sm hover-up">Back</a></button>
+                            </div>
+                    </div>
                 </div>
             </div>
-            
-            
+            <div class="col-lg-3">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Media</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="input-upload">
+                            <input type="file" class="form-control" id="imageFile" name="image"
+                                onchange="previewImage(this, 'previewImage')" />
+                            <span style="color: red;" id="image-error"></span>
+                        </div>
+                        <div id="previewImage" style="margin-top: 10px;"></div>
+                    </div>
+                </div>
+
+
+            </div>
+            </form>
         </div>
-    </form>
-    </div>
-</section>
+    </section>
 
 
 
-</main>
-<script src="/public/assets/js/vendors/jquery-3.6.0.min.js"></script>
-<script src="/public/assets/js/vendors/bootstrap.bundle.min.js"></script>
-<script src="/public/assets/js/vendors/select2.min.js"></script>
-<script src="/public/assets/js/vendors/perfect-scrollbar.js"></script>
-<script src="/public/assets/js/vendors/jquery.fullscreen.min.js"></script>
-<!-- Main Script -->
-<script src="/public/assets/js/main.js?v=1.1" type="text/javascript"></script>
+    </main>
+    <script src="/public/assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/public/assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/public/assets/js/vendors/select2.min.js"></script>
+    <script src="/public/assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/public/assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="/public/assets/js/main.js?v=1.1" type="text/javascript"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-function submitCategory() { 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function submitCategory() {
 
-    const title = document.getElementById("title").value;
-    const titError = document.getElementById("title-error")
-    const description = document.getElementById("description").value;
-    const descError = document.getElementById("desc-error")
-    const image = document.getElementById('imageFile');
-    const imgError = document.getElementById("image-error")
+            const title = document.getElementById("title").value;
+            const titError = document.getElementById("title-error")
+            const description = document.getElementById("description").value;
+            const descError = document.getElementById("desc-error")
+            const image = document.getElementById('imageFile');
+            const imgError = document.getElementById("image-error")
+            console.log(title, description);
 
-    if(title.trim()==""){
-        titError.textContent = "Title is required!";
-        clearError(titError, 2500);
-        return; 
-    }
-    if(description.trim()==""){
-        descError.textContent = "Description is required!";
-        clearError(descError, 2500);
-        return; 
-    }
-    if(image.files.length === 0){
-        imgError.textContent = "Image is required!";
-        clearError(imgError, 2500);
-        return; 
-    }
+            if (title.trim() == "") {
+                titError.textContent = "Title is required!";
+                clearError(titError, 2500);
+                return;
+            }
+            if (description.trim() == "") {
+                descError.textContent = "Description is required!";
+                clearError(descError, 2500);
+                return;
+            }
+            if (image.files.length === 0) {
+                imgError.textContent = "Image is required!";
+                clearError(imgError, 2500);
+                return;
+            }
 
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('description', description);
-    formData.append('image', image.files[0]);
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('description', description);
+            formData.append('image', image.files[0]);
 
-    fetch('/admin/add-category', {
-        method: 'POST',
-        body: formData,
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.ok) {
-            Swal.fire({
-                title: "Success!",
-                text: "Category added successfully!",
-                icon: "success"
-            }).then(() => {
-                location.href = '/admin/category';
-            });
-        }else if(data.exits){
-        titError.textContent = "This title already exists!";
-        clearError(titError, 2500);
-        return; 
+            fetch('/admin/add-categories', {
+                method: 'POST',
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Category added successfully!",
+                            icon: "success"
+                        }).then(() => {
+                            location.href = '/admin/category';
+                        });
+                    } else if (data.exits) {
+                        titError.textContent = "This title already exists!";
+                        clearError(titError, 2500);
+                        return;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
         }
-    })
-    .catch(error => {
-        console.error('Error fetching data:', error);
-    });
-}
 
-function clearError(element, time) {
-        setTimeout(() => (element.textContent = ""), time);
-      }
+        function clearError(element, time) {
+            setTimeout(() => (element.textContent = ""), time);
+        }
 
-      function previewImage(input, previewId) {
-    const preview = document.getElementById(previewId);
-    const file = input.files[0];
+        function previewImage(input, previewId) {
+            const preview = document.getElementById(previewId);
+            const file = input.files[0];
 
-    preview.innerHTML = '';
+            preview.innerHTML = '';
 
-    if (file) {
-        const reader = new FileReader();
+            if (file) {
+                const reader = new FileReader();
 
-        reader.onload = function (e) {
-            const image = new Image();
-            image.src = e.target.result;
-            image.style.maxWidth = '100%';
+                reader.onload = function (e) {
+                    const image = new Image();
+                    image.src = e.target.result;
+                    image.style.maxWidth = '100%';
 
-            const container = document.createElement('div');
-            container.style.position = 'relative'; 
+                    const container = document.createElement('div');
+                    container.style.position = 'relative';
 
-            container.appendChild(image);
-            const removeIcon = document.createElement('i');
-            removeIcon.className = 'class="icon material-icons md-close';
-            removeIcon.style.backgroundColor = 'white'; 
-            removeIcon.style.position = 'absolute'; 
-            removeIcon.style.top = '5px'; 
-            removeIcon.style.right = '5px';
-            removeIcon.style.cursor = 'pointer'; 
-            removeIcon.style.borderRadius = '50%';
-            removeIcon.onclick = function() {
-                preview.innerHTML = ''; 
-                input.value = ''; 
-            };
+                    container.appendChild(image);
+                    const removeIcon = document.createElement('i');
+                    removeIcon.className = 'class="icon material-icons md-close';
+                    removeIcon.style.backgroundColor = 'white';
+                    removeIcon.style.position = 'absolute';
+                    removeIcon.style.top = '5px';
+                    removeIcon.style.right = '5px';
+                    removeIcon.style.cursor = 'pointer';
+                    removeIcon.style.borderRadius = '50%';
+                    removeIcon.onclick = function () {
+                        preview.innerHTML = '';
+                        input.value = '';
+                    };
 
-            container.appendChild(removeIcon);
+                    container.appendChild(removeIcon);
 
-            preview.appendChild(container);
-        };
+                    preview.appendChild(container);
+                };
 
-        reader.readAsDataURL(file);
-    }
-}
+                reader.readAsDataURL(file);
+            }
+        }
 
-</script>
+    </script>
 
-</body>
+    </body>
 
-</html>                            
+    </html>
