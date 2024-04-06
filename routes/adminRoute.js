@@ -2,7 +2,9 @@ const express = require("express");
 const adminRoute = express();
 const session = require("express-session");
 const admincontrollers = require("../controller/adminController");
+const productController = require("../controller/productController");
 const multer = require("../middleware/multer");
+const multerproduct = require("../middleware/multer-product");
 
 adminRoute.use(
   session({
@@ -29,5 +31,8 @@ adminRoute.post(
   admincontrollers.addCategoryPost
 );
 adminRoute.delete("/delete-category", admincontrollers.deleteCategory);
+adminRoute.get("/products", productController.loadProducts);
+adminRoute.get("/add-products", productController.loadAddProducts);
+adminRoute.post("/add-products",multerproduct.uploadMultiple, productController.addProductPost);
 
 module.exports = adminRoute;
