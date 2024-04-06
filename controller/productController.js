@@ -13,7 +13,7 @@ const loadProducts = async (req, res) => {
 
 const loadAddProducts = async (req, res) => {
   try {
-    const categories = await categoryModel.find({ is_blocked: false })
+    const categories = await categoryModel.find({ is_blocked: true })
     res.render("add-products", { categories });
   } catch (error) {
     console.log(error);
