@@ -45,10 +45,10 @@
                   <tr>
                     <th>Seller</th>
                     <th>Email</th>
-                    <th class="text-end">Status</th>
-                    <th class="text-end">Category</th>
-                    <th class="text-end">Registered</th>
-                    <th class="text-end">Action</th>
+                    <th>Status</th>
+                    <th>Category</th>
+                    <th>Registered</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -69,18 +69,18 @@
                       </a>
                     </td>
                     <td><%= product.price%></td>
-                    <td class="text-end"><%= product.quantity%></td>
-                    <td class="text-end"><%= product.categoryId?.title%></td>
-                    <td class="text-end">
+                    <td><%= product.quantity%></td>
+                    <td><%= product.categoryId?.title%></td>
+                    <td>
                       <span class="badge rounded-pill alert-success"
                         >Active</span
                       >
                     </td>
-                    <td class="text-end">
+                    <td>
                       <a
-                        href="#"
-                        class="btn btn-sm btn-brand rounded font-sm mt-15"
-                        >View details</a
+                        href="/admin/edit-product?id=<%=product._id%>"
+                        class="btn btn-sm btn-brand rounded font-sm"
+                        >Edit</a
                       >
                     </td>
                   </tr>

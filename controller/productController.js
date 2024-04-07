@@ -13,8 +13,20 @@ const loadProducts = async (req, res) => {
 
 const loadAddProducts = async (req, res) => {
   try {
-    const categories = await categoryModel.find({ is_blocked: true })
+    const categories = await categoryModel.find()
     res.render("add-products", { categories });
+  } catch (error) {
+    console.log(error);
+  }
+};
+const editProduct = async (req, res) => {
+  try {
+    const id = req.query.id
+    const products = await productModel.findOne({_id:id})
+    const categories = await categoryModel.find()
+
+    console.log(categories);
+    res.render("edit-products", { categories, products });
   } catch (error) {
     console.log(error);
   }
@@ -53,5 +65,6 @@ const addProductPost = async (req, res) => {
 module.exports = {
   loadProducts,
   addProductPost,
-  loadAddProducts
+  loadAddProducts,
+  editProduct
 }
