@@ -1,5 +1,100 @@
 <%- include('../partials/category-partial.ejs') -%>
 
+<style>
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+  }
+
+  input:checked + .slider {
+    background-color: #3bb77e;
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 1px #3bb77e;
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+
+  .slider.round {
+    border-radius: 34px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+  .on-label,
+  .off-label {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: none;
+    right: 20px;
+  }
+
+  input:checked + .slider + .on-label {
+    display: inline-block; 
+  }
+
+  input:not(:checked) + .slider ~ .off-label {
+    display: inline-block; 
+  }
+
+  .on-label {
+    left: 10px; 
+  }
+
+  .off-label {
+    right: 10px; 
+  }
+
+  #imageContainer {
+width: 100%;
+height: 200px; /* Adjust height as needed */
+background-size: cover;
+background-position: center;
+}
+
+</style>
+
+
       <section class="content-main">
         <div class="content-header">
           <div>
@@ -11,6 +106,7 @@
             >
           </div>
         </div>
+
         <header class="card card-body mb-4">
           <div class="row gx-3">
             <div class="col-lg-2 col-6 col-md-3">
@@ -31,99 +127,8 @@
           </div>
         </header>
 
-        <style>
-          .switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 34px;
-          }
+        <%if(categories && categories.length>0){%>
 
-          .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-          }
-
-          .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            -webkit-transition: 0.4s;
-            transition: 0.4s;
-          }
-
-          .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            -webkit-transition: 0.4s;
-            transition: 0.4s;
-          }
-
-          input:checked + .slider {
-            background-color: #3bb77e;
-          }
-
-          input:focus + .slider {
-            box-shadow: 0 0 1px #3bb77e;
-          }
-
-          input:checked + .slider:before {
-            -webkit-transform: translateX(26px);
-            -ms-transform: translateX(26px);
-            transform: translateX(26px);
-          }
-
-          .slider.round {
-            border-radius: 34px;
-          }
-
-          .slider.round:before {
-            border-radius: 50%;
-          }
-
-          .on-label,
-          .off-label {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            display: none;
-            right: 20px;
-          }
-
-          input:checked + .slider + .on-label {
-            display: inline-block; 
-          }
-
-          input:not(:checked) + .slider ~ .off-label {
-            display: inline-block; 
-          }
-
-          .on-label {
-            left: 10px; 
-          }
-
-          .off-label {
-            right: 10px; 
-          }
-
-          #imageContainer {
-    width: 100%;
-    height: 200px; /* Adjust height as needed */
-    background-size: cover;
-    background-position: center;
-}
-
-        </style>
 
         <div class="row">
           <% categories.forEach(function(product, index) { %>
@@ -157,7 +162,7 @@
                   <div class="icon-container d-flex">
                     <button
                       class="btn btn-md rounded font-sm hover-up me-2"
-                      onclick="editCategory('<%=product.title%>','<%=product.description%>','<%=product.imageUrl%>')"
+                      onclick="editCategory('<%=product.title%>','<%=product.description%>','<%=product.imageUrl%>','<%=product._id%>')"
                       data-toggle="modal"
                       data-target="#exampleModalCenter"
                     >
@@ -177,6 +182,11 @@
           </div>
           <% }) %>
         </div>
+        <%}else{%>
+          <h2 class="text-center">No category found</h2>
+          <%}%>
+
+
 
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -192,22 +202,24 @@
                     <form id="category-form" enctype="multipart/form-data">
                         <div class="modal-body">
                             <div class="card-body">
-                                <div class="mb-4">
+                                <div class="mb-2  ">
                                     <label for="title" class="form-label">Category Title</label>
                                     <input type="text" class="form-control" id="title" name="title" placeholder="Type here" />
                                     <span id="title-error" style="color: red"></span>
                                 </div>
-                                <div class="mb-4">
+                                <div>
                                     <label for="description" class="form-label">Full Description</label>
                                     <textarea class="form-control" id="description" name="description" placeholder="Type here" rows="4"></textarea>
                                     <span id="desc-error" style="color: red"></span>
                                 </div>
                             </div>
         
-                            <div class="card-body">
+                            <div class="card-body text-center">
                               <img id="category-image" src="" alt="Category Image" style="max-width: 100%; max-height: 200px;"/>
-                          </div>
+                            </div>
       
+
+                            <input type="text" id="id-input" hidden>
 
                             <div class="card-body">
                                 <div class="input-upload">
@@ -267,22 +279,57 @@
     </script>
 
     <script>
-      function editCategory(title, description, imageUrl) {
-        console.log(imageUrl,'imageurllll');
+      function editCategory(title, description, imageUrl,id) {
         document.getElementById("title").value = title;
-    document.getElementById("description").value = description;
+        document.getElementById("description").value = description;
+        document.getElementById('id-input').value=id
 
-     // Set image src
      var image = document.getElementById('category-image');
      console.log(image);
     image.src = '/public/categoryimages/' + imageUrl; 
       }
 
       function submitCategory() {
-        const title = document.getElementById("title").value;
-        const description = document.getElementById("description").value;
-        console.log(title, description);
-      }
+    const title = document.getElementById("title").value;
+    const description = document.getElementById("description").value;
+    const titleError = document.getElementById('title-error');
+    const descError = document.getElementById('desc-error');
+    const id = document.getElementById('id-input').value;
+
+    if (title.trim() === "") {
+        titleError.textContent = "Title is required!";
+        clearError(titleError, 2500);
+        return;
+    }
+    if (description.trim() === "") {
+        descError.textContent = "Description is required!";
+        clearError(descError, 2500);
+        return;
+    }
+
+    fetch('/admin/category-edit', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            title,
+            description,
+            id
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.ok) {
+            console.log("got d");
+        }
+    });
+}
+
+
+      function clearError(element, time) {
+            setTimeout(() => (element.textContent = ""), time);
+        }
     </script>
 
     <script>

@@ -1,5 +1,7 @@
 const categoryModel = require("../models/category-model");
 const dotenv = require("dotenv").config();
+const fs = require("fs");
+const path = require("path");
 
 const loadAdminLogin = async (req, res) => {
   try {
@@ -38,7 +40,7 @@ const addCategory = async (req, res) => {
   try {
     res.render("add-category");
   } catch (error) {
-    console.log(error); 
+    console.log(error);
   }
 };
 
@@ -50,7 +52,7 @@ const addCategoryPost = async (req, res) => {
     const existingCategory = await categoryModel.findOne({
       title: { $regex: new RegExp(title, "i") },
     });
-    existingCategory
+    existingCategory;
     if (existingCategory) {
       return res.json({ exits: true });
     }
@@ -69,12 +71,23 @@ const addCategoryPost = async (req, res) => {
 const deleteCategory = async (req, res) => {
   try {
     const id = req.body.productId;
-    const deleted = await categoryModel.deleteOne({ _id: id });
-    if (deleted) {
+    const category = await categoryModel.findById(id);
+    const imageFilename = category.imageUrl;
+    const imagePath = "public/categoryimages/" + imageFilename;
+    if (fs.existsSync(imagePath)) {
+      fs.unlinkSync(imagePath);
+    }
+    const deletedCategory = await categoryModel.deleteOne({ _id: id });
+    if (deletedCategory.deletedCount === 1) {
       res.json({ ok: true });
+    } else {
+      res
+        .status(500)
+        .json({ error: "Failed to delete category from database" });
     }
   } catch (error) {
     console.log(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -90,14 +103,25 @@ const categoryStatus = async (req, res) => {
   }
 };
 
+const categoryEdit = async (req, res) => {
+  try {
+    const { title, description, id } = req.body;
+
+    const category = await categoryModel.findOne({ _id: id });
+    console.log(category,  "id kittiyo");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const adminLogout = async (req, res) => {
   try {
-      req.session.destroy();
-      res.redirect('/admin');
+    req.session.destroy();
+    res.redirect("/admin");
   } catch (error) {
-      console.log(error.message);
+    console.log(error.message);
   }
-}
+};
 
 module.exports = {
   loadAdminLogin,
@@ -107,5 +131,6 @@ module.exports = {
   addCategory,
   deleteCategory,
   categoryStatus,
-  adminLogout
+  adminLogout,
+  categoryEdit,
 };
