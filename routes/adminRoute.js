@@ -40,7 +40,8 @@ adminRoute.get("/products", productController.loadProducts);
 adminRoute.get("/add-products", productController.loadAddProducts);
 adminRoute.post("/add-product",multer.uploadMultiple, productController.addProductPost);
 adminRoute.get("/edit-product", productController.editProduct);
-adminRoute.get("/edit-products", productController.editProductPost);
+adminRoute.post("/edit-products",multer.uploadMultiple, productController.editProductPost);
 adminRoute.post('/category-edit',admincontrollers.categoryEdit);
+adminRoute.delete("/delete-product", productController.deleteProduct);
 
 module.exports = adminRoute;

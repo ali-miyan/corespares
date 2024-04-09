@@ -39,7 +39,7 @@
                                     id="description" class="form-control" rows="4"></input>
                                 <span id="desc-error" style="color: red;"></span>
                             </div>
-
+                            <input type="hidden" value="<%= products._id%>" id="id" name="id"></input>
                             <div>
                                 <button type="button" onclick="submitEditProduct()"
                                     class="btn btn-md rounded font-sm hover-up">Add</button>
@@ -64,6 +64,11 @@
                     <div class="card-header">
                         <h4>Media</h4>
                     </div>
+                        <div class="justify-content-center d-flex">
+                            <button type="button" id="removeBtn" class="bg-danger my-2 font-sm rounded hover-up" onclick="removeImages()">
+                                remove&nbsp;&#10006;
+                            </button>
+                        </div>
                     <div id="imageContainer">
                         <% products.images.forEach(function(item) { %>
                             <div style="margin: 4px;">
@@ -72,8 +77,8 @@
                             </div>
                             <% }); %>
                     </div>
-                    <button type="button" id="removeBtn" class="btn btn-md rounded font-sm hover-up"
-                        onclick="removeImages()">Remove Images</button>
+
+
 
                     <div class="card-body" id="imageSection">
                         <!-- This div will be replaced with input to add new photos -->
@@ -132,16 +137,25 @@
                         image.style.maxWidth = '100%';
                         const container = document.createElement('div');
                         container.style.position = 'relative';
-
                         container.appendChild(image);
-
                         preview.appendChild(container);
                     };
 
                     reader.readAsDataURL(file);
                 });
+
+                const clearButton = document.createElement('button');
+                clearButton.textContent = 'remove';
+                clearButton.classList.add('bg-danger', 'rounded', 'font-sm', 'my-2', 'hover-up');
+                clearButton.addEventListener('click', function () {
+                    preview.innerHTML = '';
+                    input.value = '';
+                });
+                preview.appendChild(clearButton);
             }
         }
+
+
 
 
 
@@ -157,8 +171,9 @@
             const priceError = document.getElementById("price-error")
             const image = document.getElementById('imageFile');
             const category = document.getElementById('id_select2_example').value;
+            const id = document.getElementById('id').value;
             const imgError = document.getElementById("image-error")
-            const files = image.files
+            const files = image ? image.files : null;
 
 
             console.log(files);
@@ -182,8 +197,13 @@
                 clearError(descError, 2500);
                 return;
             }
-            if (image.files.length === 0) {
+            if (files && image.files.length === 0) {
                 imgError.textContent = "Image is required!";
+                clearError(imgError, 2500);
+                return;
+            }
+            if (files && image.files.length > 5) {
+                imgError.textContent = "Maximum 5 images only!";
                 clearError(imgError, 2500);
                 return;
             }
@@ -191,17 +211,18 @@
 
             const formData = new FormData();
             formData.append('title', title);
+            formData.append('id', id);
             formData.append('description', description);
             formData.append('price', price);
             formData.append('quantity', quantity);
             formData.append('category', category);
-            if (files.length > 0) {
+            if (files && files.length > 0) {
                 for (let i = 0; i < files.length; i++) {
                     formData.append('images', files[i]);
                 }
             }
 
-            console.log(title, description, price, image);
+            console.log(title, description, price, image, id);
             console.log(formData);
 
             fetch('/admin/edit-products', {
