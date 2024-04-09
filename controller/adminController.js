@@ -1,4 +1,6 @@
 const categoryModel = require("../models/category-model");
+const productModel = require("../models/product-model");
+
 const dotenv = require("dotenv").config();
 const fs = require("fs");
 const path = require("path");
@@ -94,10 +96,12 @@ const deleteCategory = async (req, res) => {
 const categoryStatus = async (req, res) => {
   try {
     const { categoryId, isBlocked } = req.body;
+    console.log(isBlocked);
     await categoryModel.updateOne(
       { _id: categoryId },
-      { is_blocked: isBlocked }
+      { is_blocked: !isBlocked }
     );
+    await productModel.updateMany({categoryId:categoryId},{isCategoryBlocked:!isBlocked})
   } catch (error) {
     console.log(error);
   }
