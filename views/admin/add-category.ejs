@@ -99,8 +99,7 @@
             const formData = new FormData();
             formData.append('title', title);
             formData.append('description', description);
-            formData.append('image', image.files[0]);
-
+            formData.append('image', image.files[0].name);
             fetch('/admin/add-categories', {
                 method: 'POST',
                 body: formData,

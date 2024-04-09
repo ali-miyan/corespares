@@ -210,11 +210,11 @@
 
 
                     <input type="text" id="id-input" hidden>
+                    <input type="text" id="image-input" hidden>
 
                     <div class="card-body">
                       <div class="input-upload">
                         <input type="file" class="form-control" id="imageFile" name="image" />
-                        <span style="color: red" id="image-error"></span>
                       </div>
                     </div>
                   </div>
@@ -273,6 +273,8 @@
       document.getElementById("title").value = title;
       document.getElementById("description").value = description;
       document.getElementById('id-input').value = id
+      document.getElementById('image-input').value = imageUrl
+
 
       var image = document.getElementById('category-image');
       console.log(image);
@@ -285,6 +287,10 @@
       const titleError = document.getElementById('title-error');
       const descError = document.getElementById('desc-error');
       const id = document.getElementById('id-input').value;
+      const image = document.getElementById('imageFile');
+      const oldImage = document.getElementById('image-input');
+      console.log(oldImage,image);
+
 
       if (title.trim() === "") {
         titleError.textContent = "Title is required!";
@@ -297,21 +303,27 @@
         return;
       }
 
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('id', id);
+      formData.append('description', description);
+
+      if (image.files.length === 0) {
+        formData.append('image', oldImage);
+         } else {
+       formData.append('image', image.files[0].name);
+      }
+  
+
+      
       fetch('/admin/category-edit', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          title,
-          description,
-          id
-        })
+        body: formData,
       })
         .then(res => res.json())
         .then(data => {
           if (data.ok) {
-            console.log("got d");
+            window.location.href = '/admin/category';
           }
         });
     }

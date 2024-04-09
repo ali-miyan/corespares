@@ -48,8 +48,9 @@ const addCategory = async (req, res) => {
 
 const addCategoryPost = async (req, res) => {
   try {
-    const { title, description } = req.body;
-    const imageUrl = req.file.filename;
+    console.log(req.body);
+    const { title, description ,image} = req.body;
+    // const imageUrl = req.file.filename;
 
     const existingCategory = await categoryModel.findOne({
       title: { $regex: new RegExp(title, "i") },
@@ -61,7 +62,7 @@ const addCategoryPost = async (req, res) => {
     const newCategory = new categoryModel({
       title,
       description,
-      imageUrl,
+      imageUrl:image,
     });
     await newCategory.save();
     return res.json({ ok: true, message: "Category created successfully" });
@@ -109,10 +110,12 @@ const categoryStatus = async (req, res) => {
 
 const categoryEdit = async (req, res) => {
   try {
-    const { title, description, id } = req.body;
+    const { title, description, id , image } = req.body;
 
-    const category = await categoryModel.findOne({ _id: id });
-    console.log(category,  "id kittiyo");
+
+console.log(image);
+    const category = await categoryModel.updateOne({ _id: id },{title:title,description:description,imageUrl:image});
+    res.json({ok:true})
   } catch (error) {
     console.log(error);
   }
