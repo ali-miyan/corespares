@@ -62,23 +62,23 @@
                 </div>
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h4>Media<span class="icon material-icons md-close"></span></h4>
+                        <h4>Media</h4>
                     </div>
-                    <% products.images.forEach(function(item) { %>
-
-                    <div style="margin: 4px;">
-                        <img src="/public/productimages/<%=item%>" style="max-width: 100%; object-fit: contain;" />
-                      </div>    
-                      <% }); %>
-
-                    <div class="card-body">
-                        <div class="input-upload">
-                            <input class="form-control" type="file" id="imageFile" name="image" multiple
-                                onchange="previewImages(this, 'previewImages')" />
-                            <span style="color: red;" id="image-error"></span>
-                        </div>
-                        <div id="previewImages" style="margin-top: 10px;"></div>
+                    <div id="imageContainer">
+                        <% products.images.forEach(function(item) { %>
+                            <div style="margin: 4px;">
+                                <img src="/public/productimages/<%=item%>"
+                                    style="max-width: 100%; object-fit: contain;" />
+                            </div>
+                            <% }); %>
                     </div>
+                    <button type="button" id="removeBtn" class="btn btn-md rounded font-sm hover-up"
+                        onclick="removeImages()">Remove Images</button>
+
+                    <div class="card-body" id="imageSection">
+                        <!-- This div will be replaced with input to add new photos -->
+                    </div>
+
 
                 </div>
             </div>
@@ -145,6 +145,7 @@
 
 
 
+
         function submitEditProduct() {
             const title = document.getElementById("title").value;
             const titError = document.getElementById("title-error")
@@ -161,7 +162,6 @@
 
 
             console.log(files);
-
             if (title.trim() == "") {
                 titError.textContent = "Title is required!";
                 clearError(titError, 2500);
@@ -204,7 +204,7 @@
             console.log(title, description, price, image);
             console.log(formData);
 
-            fetch('/admin/edit-product', {
+            fetch('/admin/edit-products', {
                 method: 'POST',
                 body: formData,
             })
@@ -213,7 +213,7 @@
                     if (data.ok) {
                         Swal.fire({
                             title: "Success!",
-                            text: "Product added successfully!",
+                            text: "Product edited successfully!",
                             icon: "success"
                         }).then(() => {
                             location.href = '/admin/products';
@@ -230,6 +230,34 @@
                     console.error('Error fetching data:', error);
                 });
         }
+    </script>
+    <script>
+        function removeImages() {
+
+            document.getElementById('imageContainer').style.display = 'none';
+            document.getElementById('removeBtn').style.display = 'none';
+
+            // Remove all existing images
+            var imagesSection = document.getElementById('imageSection');
+            imagesSection.innerHTML = '';
+
+            // Add input to add new photos
+            var inputUploadDiv = document.createElement('div');
+            inputUploadDiv.classList.add('input-upload');
+            inputUploadDiv.innerHTML = `
+                <input class="form-control" type="file" id="imageFile" name="image" multiple onchange="previewImages(this, 'previewImages')" />
+                <span style="color: red;" id="image-error"></span>
+                <div id="previewImages" style="margin-top: 10px;"></div>
+            `;
+            imagesSection.appendChild(inputUploadDiv);
+
+            // Clear preview images if any
+            var previewImagesDiv = document.getElementById('previewImages');
+            if (previewImagesDiv) {
+                previewImagesDiv.innerHTML = '';
+            }
+        }
+
     </script>
     </body>
 
