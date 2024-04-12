@@ -10,6 +10,7 @@ const loadAdminLogin = async (req, res) => {
     res.render("admin-login");
   } catch (error) {
     console.log(error);
+    res.status(500).render('500');
   }
 };
 
@@ -26,6 +27,7 @@ const adminLogin = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(500).render('500');
   }
 };
 
@@ -35,6 +37,7 @@ const loadCategory = async (req, res) => {
     res.render("category", { categories });
   } catch (error) {
     console.log(error);
+    res.status(500).render('500');
   }
 };
 
@@ -43,6 +46,7 @@ const addCategory = async (req, res) => {
     res.render("add-category");
   } catch (error) {
     console.log(error);
+    res.status(500).render('500');
   }
 };
 
@@ -68,6 +72,7 @@ const addCategoryPost = async (req, res) => {
     return res.json({ ok: true, message: "Category created successfully" });
   } catch (err) {
     console.error(err);
+    res.status(500).render('500');
   }
 };
 
@@ -90,7 +95,7 @@ const deleteCategory = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).render('500');
   }
 };
 
@@ -102,9 +107,10 @@ const categoryStatus = async (req, res) => {
       { _id: categoryId },
       { is_blocked: !isBlocked }
     );
-    await productModel.updateMany({categoryId:categoryId},{isCategoryBlocked:!isBlocked})
+    await productModel.updateMany({ categoryId: categoryId }, { isCategoryBlocked: !isBlocked })
   } catch (error) {
     console.log(error);
+    res.status(500).render('500');
   }
 };
 
@@ -112,12 +118,12 @@ const categoryEdit = async (req, res) => {
   try {
     const { title, description, id , image } = req.body;
 
-
-console.log(image);
-    const category = await categoryModel.updateOne({ _id: id },{title:title,description:description,imageUrl:image});
+const category = await categoryModel.updateOne({ _id: id },{title:title,description:description,imageUrl:image});
     res.json({ok:true})
+
   } catch (error) {
     console.log(error);
+    res.status(500).render('500');
   }
 };
 
@@ -126,7 +132,8 @@ const adminLogout = async (req, res) => {
     req.session.destroy();
     res.redirect("/admin");
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
+    res.status(500).render('500');
   }
 };
 
