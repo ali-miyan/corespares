@@ -8,6 +8,7 @@ const loadProducts = async (req, res) => {
     res.render("products", { products });
   } catch (error) {
     console.log(error);
+    res.status(500).render('500');
   }
 };
 
@@ -18,6 +19,7 @@ const loadAddProducts = async (req, res) => {
     res.render("add-products", { categories });
   } catch (error) {
     console.log(error);
+    res.status(500).render('500');
   }
 };
 const editProduct = async (req, res) => {
@@ -30,6 +32,7 @@ const editProduct = async (req, res) => {
     res.render("edit-products", { categories, products });
   } catch (error) {
     console.log(error);
+    res.status(500).render('500');
   }
 };
 
@@ -59,6 +62,7 @@ const addProductPost = async (req, res) => {
     return res.json({ ok: true, message: "Category created successfully" });
   } catch (err) {
     console.error(err);
+    res.status(500).render('500');
     return res.json({ ok: false, message: "Category created successfully" });
   }
 };
@@ -98,6 +102,7 @@ const editProductPost = async (req, res) => {
     return res.json({ ok: true, message: "Product created successfully" });
   } catch (err) {
     console.error(err);
+    res.status(500).render('500');
     return res.json({ ok: false, message: "Product created successfully" });
   }
 };
@@ -124,7 +129,22 @@ const deleteProduct = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(500).render('500');
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const productStatus = async (req, res) => {
+  try {
+    const { productId, isBlocked } = req.body;
+    console.log(isBlocked);
+    await productModel.updateOne(
+      { _id: productId },
+      { is_blocked: !isBlocked }
+    );
+  } catch (error) {
+    console.log(error);
+    res.status(500).render('500');
   }
 };
 
@@ -134,5 +154,6 @@ module.exports = {
   loadAddProducts,
   editProduct,
   editProductPost,
-  deleteProduct
+  deleteProduct,
+  productStatus
 }

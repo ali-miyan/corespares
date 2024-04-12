@@ -3,7 +3,7 @@ const productModel = require("../models/product-model");
 
 const loadUserHome = async (req, res) => {
   try {
-    const category = await categoryModel.find({ is_blocked: true });
+    const category = await categoryModel.find({ is_blocked: false });
     res.render("home", { category });
   } catch (error) {
     console.log(error);
@@ -11,12 +11,13 @@ const loadUserHome = async (req, res) => {
   }
 };
 
-loadUserShop = async (req, res) => {
+const loadUserShop = async (req, res) => {
   try {
     const id = req.params.id;
     const product = await productModel
-      .find({ categoryId: id })
+      .find({ categoryId: id, is_blocked: false })
       .populate("categoryId");
+      console.log(product);
     res.render("products", { product });
   } catch (error) {
     console.log(error);
@@ -30,9 +31,16 @@ const loadProductDetails = async (req, res) => {
     const product = await productModel
       .findOne({ _id: id })
       .populate("categoryId");
-    res.render("eachProduct", { product });
+
+    const relatedProducts = await productModel.find({
+      categoryId: product.categoryId,
+      _id: { $ne: id }
+    }).populate("categoryId");
+
+    res.render("eachProduct", { product, relatedProducts });
   } catch (error) {
     console.log(error);
+    res.status(500).render('500');
   }
 };
 

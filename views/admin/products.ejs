@@ -42,7 +42,7 @@
                 <th>Price</th>
                 <th>Category</th>
                 <th>status</th>
-                <th>Action</ th>
+                <th>Action</th>
                 <th>Edit</th>
               </tr>
             </thead>
@@ -72,11 +72,16 @@
                     <%= product.categoryId?.title%>
                   </td>
                   <td>
-                    <% if(product.is_blocked) { %>
-                      <span class="badge rounded-pill alert-success">Active</span>
-                      <% } else { %>
-                        <span class="badge rounded-pill alert-danger">not-Active</span>
-                        <% } %>
+                    <div class="switch">
+                      <label>
+                        <input type="checkbox" onclick="updateBlockStatus('<%=index%>')" <%=product.is_blocked ? "" : "checked" %>
+                        data-product-id="<%= product._id %>"
+                          id="blockToggle<%=index%>">
+                          <span class="slider round"></span>
+                          <span class="on-label">On</span>
+                          <span class="off-label">Off</span>
+                      </label>
+                    </div>
                   </td>
                   <td>
                     <button id="showalert" onclick="confirmDelete('<%= product._id %>')"
@@ -100,6 +105,99 @@
     <!-- card end// -->
   </section>
   </main>
+  <style>
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: 0.4s;
+      transition: 0.4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: 0.4s;
+      transition: 0.4s;
+    }
+
+    input:checked+.slider {
+      background-color: #3bb77e;
+    }
+
+    input:focus+.slider {
+      box-shadow: 0 0 1px #3bb77e;
+    }
+
+    input:checked+.slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
+
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+    .on-label,
+    .off-label {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      display: none;
+      right: 20px;
+    }
+
+    input:checked+.slider+.on-label {
+      display: inline-block;
+    }
+
+    input:not(:checked)+.slider~.off-label {
+      display: inline-block;
+    }
+
+    .on-label {
+      left: 10px;
+    }
+
+    .off-label {
+      right: 10px;
+    }
+
+    #imageContainer {
+      width: 100%;
+      height: 200px;
+      /* Adjust height as needed */
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
   <script>
     function confirmDelete(productId) {
       Swal.fire({
@@ -133,6 +231,36 @@
         })
         .catch((error) => {
           console.error("Error deleting product:", error);
+        });
+    }
+  </script>
+  <script>
+
+    function updateBlockStatus(index) {
+      console.log(index);
+      var blockToggle = document.getElementById(`blockToggle${index}`);
+      var isBlocked = blockToggle.checked;
+      var productId = blockToggle.getAttribute("data-product-id");
+      console.log(productId, isBlocked);
+      fetch("/admin/product-status", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productId: productId,
+          isBlocked: isBlocked,
+        }),
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log("Block status updated successfully");
+          } else {
+            console.error("Failed to update block status");
+          }
+        })
+        .catch((error) => {
+          console.error("Error updating block status:", error);
         });
     }
   </script>

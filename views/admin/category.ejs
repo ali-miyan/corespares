@@ -143,9 +143,9 @@
                 <div class="d-flex justify-content-between align-items-center mt-3">
                   <div class="switch">
                     <label>
-                      <input type="checkbox" <%=product.is_blocked ? "checked" : "" %> data-product-id="<%= product.id
+                      <input type="checkbox" onclick="updateBlockStatus('<%=index%>')" <%=product.is_blocked ? "" : "checked" %> data-product-id="<%= product._id
                         %>"
-                        id="blockToggle">
+                        id="blockToggle<%=index%>">
                         <span class="slider round"></span>
                         <span class="on-label">On</span>
                         <span class="off-label">Off</span>
@@ -323,15 +323,13 @@
   </script>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      var blockToggle = document.getElementById("blockToggle");
-      blockToggle.addEventListener("change", function () {
+
+      function updateBlockStatus(index) {
+        console.log(index);
+        var blockToggle = document.getElementById(`blockToggle${index}`);
         var isBlocked = blockToggle.checked;
         var productId = blockToggle.getAttribute("data-product-id");
-        updateBlockStatus(productId, isBlocked);
-      });
-
-      function updateBlockStatus(productId, isBlocked) {
+        console.log(productId,isBlocked);
         fetch("/admin/category-status", {
           method: "PATCH",
           headers: {
@@ -353,7 +351,6 @@
             console.error("Error updating block status:", error);
           });
       }
-    });
   </script>
 
   </script>
