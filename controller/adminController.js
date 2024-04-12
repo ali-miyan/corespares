@@ -52,21 +52,19 @@ const addCategory = async (req, res) => {
 
 const addCategoryPost = async (req, res) => {
   try {
-    console.log(req.body);
-    const { title, description ,image} = req.body;
-    // const imageUrl = req.file.filename;
+    const { title, description } = req.body;
+    const imageUrl = req.file;
 
     const existingCategory = await categoryModel.findOne({
       title: { $regex: new RegExp(title, "i") },
     });
-    existingCategory;
     if (existingCategory) {
       return res.json({ exits: true });
     }
     const newCategory = new categoryModel({
       title,
       description,
-      imageUrl:image,
+      imageUrl: imageUrl.filename,
     });
     await newCategory.save();
     return res.json({ ok: true, message: "Category created successfully" });
@@ -80,11 +78,6 @@ const deleteCategory = async (req, res) => {
   try {
     const id = req.body.productId;
     const category = await categoryModel.findById(id);
-    const imageFilename = category.imageUrl;
-    const imagePath = "public/categoryimages/" + imageFilename;
-    if (fs.existsSync(imagePath)) {
-      fs.unlinkSync(imagePath);
-    }
     const deletedCategory = await categoryModel.deleteOne({ _id: id });
     if (deletedCategory.deletedCount === 1) {
       res.json({ ok: true });
@@ -116,17 +109,27 @@ const categoryStatus = async (req, res) => {
 
 const categoryEdit = async (req, res) => {
   try {
-    const { title, description, id , image } = req.body;
+    const { title, description, id } = req.body;
+    console.log(req.body, req.file);
+    let imageUrlToUpdate = null;
 
-const category = await categoryModel.updateOne({ _id: id },{title:title,description:description,imageUrl:image});
-    res.json({ok:true})
+    if (req.file) {
+      imageUrlToUpdate = req.file.filename;
+    } else {
+      const existingCategory = await categoryModel.findById(id);
+      if (existingCategory) {
+        imageUrlToUpdate = existingCategory.image;
+      }
+    }
+
+    await categoryModel.updateOne({ _id: id }, { title: title, description: description, imageUrl: imageUrlToUpdate });
+    res.json({ ok: true });
 
   } catch (error) {
     console.log(error);
     res.status(500).render('500');
   }
 };
-
 const adminLogout = async (req, res) => {
   try {
     req.session.destroy();

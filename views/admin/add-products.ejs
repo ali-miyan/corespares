@@ -39,6 +39,12 @@
                                     rows="4"></input>
                                 <span id="desc-error" style="color: red;"></span>
                             </div>
+                            <div class="mb-4">
+                                <label class="form-label">Features</label>
+                                <input placeholder="Type here" name="feature" id="feature" class="form-control"
+                                    rows="4"></input>
+                                <span id="featureError" style="color: red;"></span>
+                            </div>
 
                             <div>
                                 <button type="button" onclick="submitProduct()"
@@ -89,8 +95,10 @@
     <script src="/public/assets/js/main.js?v=1.1" type="text/javascript"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
+    <script defer src="https://cdn.crop.guide/loader/l.js?c=123ABC">
+    </script>
+    
+    
     <script type="text/javascript">
         function custom_template(obj) {
             var data = $(obj.element).data();
@@ -151,6 +159,8 @@
             const titError = document.getElementById("title-error")
             const description = document.getElementById("description").value;
             const descError = document.getElementById("desc-error")
+            const feature = document.getElementById("feature").value;
+            const featureError = document.getElementById("feature-error")
             const quantity = document.getElementById("quantity").value;
             const quantityError = document.getElementById("quantity-error")
             const price = document.getElementById("price").value;
@@ -183,6 +193,11 @@
                 clearError(descError, 2500);
                 return;
             }
+            if (feature.trim() == "") {
+                featureError.textContent = "Features is required!";
+                clearError(featureError, 2500);
+                return;
+            }
             if (image.files.length === 0) {
                 imgError.textContent = "Image is required!";
                 clearError(imgError, 2500);
@@ -198,6 +213,7 @@
             const formData = new FormData();
             formData.append('title', title);
             formData.append('description', description);
+            formData.append('feature', feature);
             formData.append('price', price);
             formData.append('quantity', quantity);
             formData.append('category', category);
@@ -206,10 +222,6 @@
                     formData.append('images', files[i]);
                 }
             }
-
-            console.log(title, description, price, image);
-            console.log(formData);
-
             fetch('/admin/add-product', {
                 method: 'POST',
                 body: formData,

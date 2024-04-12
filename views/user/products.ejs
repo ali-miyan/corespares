@@ -52,11 +52,12 @@
                         <% product.forEach(function(product, index) { %>
                             <div class="col-6 col-md-4 col-lg-4 col-xl-3">
                                 <div class="product">
-                                    <figure class="product-media">
-                                        <a href="/product-details/<%=product._id%>">
-                                            <img src="/public/productimages/<%=product.images[0]%>" alt="Product image"
-                                                class="product-image">
+                                    <figure class="product-media" style="background-color: white;">
+                                        <a href="/product-details/<%= product._id %>">
+                                            <img style="margin: auto; width: auto; height: 200px; object-position: center; object-fit: fill;" src="/public/productimages/<%= product.images[0] %>" alt="Product image" class="product-image">
                                         </a>
+                                        
+                                        
 
                                         <div class="product-action-vertical">
                                             <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add
@@ -81,7 +82,7 @@
                                                 <%=product.name%>
                                             </a></h3>
                                         <div class="product-price">
-                                            <%=product.price%>
+                                            $<%=product.price%>
                                         </div>
                                     </div>
                                 </div>

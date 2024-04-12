@@ -43,7 +43,7 @@
                     </div>
                     <div class="card-body">
                         <div class="input-upload">
-                            <input type="file" class="form-control" id="imageFile" name="image"
+                            <input type="file" class="form-control" id="image" name="image"
                                 onchange="previewImage(this, 'previewImage')" />
                             <span style="color: red;" id="image-error"></span>
                         </div>
@@ -76,7 +76,7 @@
             const titError = document.getElementById("title-error")
             const description = document.getElementById("description").value;
             const descError = document.getElementById("desc-error")
-            const image = document.getElementById('imageFile');
+            const image = document.getElementById('image');
             const imgError = document.getElementById("image-error")
             console.log(title, description);
 
@@ -99,7 +99,10 @@
             const formData = new FormData();
             formData.append('title', title);
             formData.append('description', description);
-            formData.append('image', image.files[0].name);
+            formData.append('image', image.files[0]);
+
+
+            console.log(formData, 'ddddddaratya');
             fetch('/admin/add-categories', {
                 method: 'POST',
                 body: formData,

@@ -1,3 +1,4 @@
+const { features } = require("process");
 const categoryModel = require("../models/category-model");
 const productModel = require("../models/product-model");
 const fs = require("fs")
@@ -40,9 +41,11 @@ const editProduct = async (req, res) => {
 
 const addProductPost = async (req, res) => {
   try {
-    const { title, description, price, quantity, category } = req.body;
+    const { title, description, price, quantity, category, feature } = req.body;
     console.log(req.body);
     const imageFilenames = req.files.map(file => file.filename);
+
+    
 
     const existingProduct = await productModel.findOne({
       name: { $regex: new RegExp(title, "i") },
@@ -56,6 +59,7 @@ const addProductPost = async (req, res) => {
       price: price,
       categoryId: category,
       description: description,
+      features: feature,
       images: imageFilenames,
     });
     await newProduct.save();
@@ -69,8 +73,6 @@ const addProductPost = async (req, res) => {
 const editProductPost = async (req, res) => {
   try {
     const { title, description, price, quantity, category, id } = req.body;
-    console.log(req.body, 'ssssssss');
-    console.log(req.files, 'ssssssss');
     let imageFilenames = [];
 
     if (req.files && req.files.length > 0) {
@@ -80,12 +82,6 @@ const editProductPost = async (req, res) => {
       if (existingProduct) {
         imageFilenames = existingProduct.images;
       }
-    }
-    const existingProduct = await productModel.findOne({
-      name: { $regex: new RegExp(title, "i") },
-    });
-    if (existingProduct) {
-      return res.json({ exits: true });
     }
     await productModel.findByIdAndUpdate(
       id,
