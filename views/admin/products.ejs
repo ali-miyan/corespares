@@ -37,7 +37,8 @@
           <table class="table table-hover">
             <thead>
               <tr>
-                <th>Products</th>
+                <th>Image</th>
+                <th>Name</th>
                 <th>Quantity</th>
                 <th>Price</th>
                 <th>Category</th>
@@ -94,15 +95,53 @@
                       class="btn btn-sm btn-brand rounded font-sm">Edit</a>
                   </td>
                 </tr>
+
+              <% if (products && products.length > 0) { %>
+                <% products.forEach(function(product, index) { %>
+                  <tr>
+                    <td >
+                      <img style="height: 60px; width: 60px" src="/public/productimages/<%= product.images[0] %>" class="img-sm img-avatar" alt="Userpic" />
+                    </td>
+                    <td>
+                      <%= product.name %>
+                    </td>  
+                    <td>
+                      <%= product.price %>
+                    </td>
+                    <td>
+                      <%= product.quantity %>
+                    </td>
+                    <td>
+                      <%= product.categoryId?.title %>
+                    </td>
+                    <td>
+                      <% if (product.is_blocked) { %>
+                        <span class="badge rounded-pill alert-success">Active</span>
+                      <% } else { %>
+                        <span class="badge rounded-pill alert-danger">Not Active</span> <!-- corrected typo: "not-Active" to "Not Active" -->
+                      <% } %>
+                    </td>
+                    <td>
+                      <button id="showalert" onclick="confirmDelete('<%= product._id %>')" class="btn rounded font-sm hover-up">
+                        <i class="material-icons md-delete"></i>
+                      </button>
+                    </td>
+                    <td>
+                      <a href="/admin/edit-product?id=<%= product._id %>" class="btn btn-sm btn-brand rounded font-sm">Edit</a>
+                    </td>
+                  </tr>
+
                 <% }) %>
+              <% } else { %>
+                <tr>
+                  <td colspan="7" class="text-center">No products found</td> <!-- corrected colspan -->
+                </tr>
+              <% } %>
             </tbody>
           </table>
-          <!-- table-responsive.// -->
         </div>
       </div>
-      <!-- card-body end// -->
     </div>
-    <!-- card end// -->
   </section>
   </main>
   <style>
