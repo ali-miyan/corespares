@@ -1,100 +1,4 @@
 <%- include('../partials/category-partial.ejs') -%>
-
-  <style>
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 60px;
-      height: 34px;
-    }
-
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      -webkit-transition: 0.4s;
-      transition: 0.4s;
-    }
-
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 26px;
-      width: 26px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      -webkit-transition: 0.4s;
-      transition: 0.4s;
-    }
-
-    input:checked+.slider {
-      background-color: #3bb77e;
-    }
-
-    input:focus+.slider {
-      box-shadow: 0 0 1px #3bb77e;
-    }
-
-    input:checked+.slider:before {
-      -webkit-transform: translateX(26px);
-      -ms-transform: translateX(26px);
-      transform: translateX(26px);
-    }
-
-    .slider.round {
-      border-radius: 34px;
-    }
-
-    .slider.round:before {
-      border-radius: 50%;
-    }
-
-    .on-label,
-    .off-label {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      display: none;
-      right: 20px;
-    }
-
-    input:checked+.slider+.on-label {
-      display: inline-block;
-    }
-
-    input:not(:checked)+.slider~.off-label {
-      display: inline-block;
-    }
-
-    .on-label {
-      left: 10px;
-    }
-
-    .off-label {
-      right: 10px;
-    }
-
-    #imageContainer {
-      width: 100%;
-      height: 200px;
-      /* Adjust height as needed */
-      background-size: cover;
-      background-position: center;
-    }
-  </style>
-
-
   <section class="content-main">
     <div class="content-header">
       <div>
@@ -104,26 +8,6 @@
         <a href="/admin/add-category" class="btn btn-primary btn-sm rounded">Create new</a>
       </div>
     </div>
-
-    <header class="card card-body mb-4">
-      <div class="row gx-3">
-        <div class="col-lg-2 col-6 col-md-3">
-          <select class="form-select">
-            <option>All category</option>
-            <option>Electronics</option>
-            <option>Clothings</option>
-            <option>Something else</option>
-          </select>
-        </div>
-        <div class="col-lg-2 col-6 col-md-3">
-          <select class="form-select">
-            <option>Latest added</option>
-            <option>Cheap first</option>
-            <option>Most viewed</option>
-          </select>
-        </div>
-      </div>
-    </header>
 
     <%if(categories && categories.length>0){%>
 
@@ -135,7 +19,7 @@
               <div class="card-body">
                 <span class="img-wrap d-block mb-3">
                   <img src="/public/categoryimages/<%= product.imageUrl %>" alt="Product"
-                    style="width: 100%; height: 200px; object-fit: cover" />
+                    style="width: 100%; height: 200px; object-fit: contain" />
                 </span>
                 <p style="font-weight: bold" class="title text-center">
                   <%= product.title %>
@@ -143,12 +27,12 @@
                 <div class="d-flex justify-content-between align-items-center mt-3">
                   <div class="switch">
                     <label>
-                      <input type="checkbox" onclick="updateBlockStatus('<%=index%>')" <%=product.is_blocked ? "" : "checked" %> data-product-id="<%= product._id
-                        %>"
+                      <input type="checkbox" onclick="updateBlockStatus('<%=index%>')" <%=product.is_blocked ? ""
+                        : "checked" %> data-product-id="<%= product._id %>"
                         id="blockToggle<%=index%>">
-                        <span class="slider round"></span>
-                        <span class="on-label">On</span>
-                        <span class="off-label">Off</span>
+                          <span class="slider round"></span>
+                          <span class="on-label">On</span>
+                          <span class="off-label">Off</span>
                     </label>
                   </div>
 
@@ -276,8 +160,8 @@
       document.getElementById('image-input').value = imageUrl
 
 
+
       var image = document.getElementById('category-image');
-      console.log(image);
       image.src = '/public/categoryimages/' + imageUrl;
     }
 
@@ -289,7 +173,6 @@
       const id = document.getElementById('id-input').value;
       const image = document.getElementById('imageFile');
       const oldImage = document.getElementById('image-input');
-      console.log(oldImage,image);
 
 
       if (title.trim() === "") {
@@ -308,15 +191,13 @@
       formData.append('id', id);
       formData.append('description', description);
 
-      if (image.files.length === 0) {
-        formData.append('image', oldImage);
-         } else {
-       formData.append('image', image.files[0].name);
-      }
-  
+      console.log(oldImage.files, 'dssdsd', image.files[0]?.name);
 
-      
-      fetch('/admin/category-edit', {
+      formData.append('image', image.files[0]);
+
+      console.log(formData, 'ddddddaratya');
+
+      fetch('/admin/edit-categories', {
         method: 'POST',
         body: formData,
       })
@@ -336,33 +217,33 @@
 
   <script>
 
-      function updateBlockStatus(index) {
-        console.log(index);
-        var blockToggle = document.getElementById(`blockToggle${index}`);
-        var isBlocked = blockToggle.checked;
-        var productId = blockToggle.getAttribute("data-product-id");
-        console.log(productId,isBlocked);
-        fetch("/admin/category-status", {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            categoryId: productId,
-            isBlocked: isBlocked,
-          }),
+    function updateBlockStatus(index) {
+      console.log(index);
+      var blockToggle = document.getElementById(`blockToggle${index}`);
+      var isBlocked = blockToggle.checked;
+      var productId = blockToggle.getAttribute("data-product-id");
+      console.log(productId, isBlocked);
+      fetch("/admin/category-status", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          categoryId: productId,
+          isBlocked: isBlocked,
+        }),
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log("Block status updated successfully");
+          } else {
+            console.error("Failed to update block status");
+          }
         })
-          .then((response) => {
-            if (response.ok) {
-              console.log("Block status updated successfully");
-            } else {
-              console.error("Failed to update block status");
-            }
-          })
-          .catch((error) => {
-            console.error("Error updating block status:", error);
-          });
-      }
+        .catch((error) => {
+          console.error("Error updating block status:", error);
+        });
+    }
   </script>
 
   </script>

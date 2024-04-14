@@ -4,7 +4,7 @@
     <main class="main">
         <div class="page-header text-center" style="background-image: url('/public/asset/images/page-header-bg.jpg')">
             <div class="container">
-                <h1 class="page-title">Shop<span>Get all electronic products</span></h1>
+                <h1 class="page-title">Shop<span>Get all <strong><%= categoryName%></strong> products</span></h1>
             </div><!-- End .container -->
         </div><!-- End .page-header -->
         <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
@@ -52,11 +52,12 @@
                         <% product.forEach(function(product, index) { %>
                             <div class="col-6 col-md-4 col-lg-4 col-xl-3">
                                 <div class="product">
-                                    <figure class="product-media">
-                                        <a href="/product-details/<%=product._id%>">
-                                            <img src="/public/productimages/<%=product.images[0]%>" alt="Product image"
-                                                class="product-image">
+                                    <figure class="product-media" style="background-color: white;">
+                                        <a href="/product-details/<%= product._id %>">
+                                            <img  src="/public/sharpimages/<%= product.images[0] %>" alt="Product image" class="product-image">
                                         </a>
+                                        
+                                        
 
                                         <div class="product-action-vertical">
                                             <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add
@@ -81,7 +82,7 @@
                                                 <%=product.name%>
                                             </a></h3>
                                         <div class="product-price">
-                                            <%=product.price%>
+                                            $<%=product.price%>
                                         </div>
                                     </div>
                                 </div>

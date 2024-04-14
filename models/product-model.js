@@ -23,6 +23,10 @@ const productSchema = mongoose.Schema({
     type: String,
     required: true
   },
+  features:{
+    type: String,
+    required: true
+  },
   images:[],
   is_blocked: {
     type: Boolean,

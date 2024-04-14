@@ -14,11 +14,14 @@ const loadUserHome = async (req, res) => {
 const loadUserShop = async (req, res) => {
   try {
     const id = req.params.id;
+    let categoryName = 'null';
     const product = await productModel
       .find({ categoryId: id, is_blocked: false })
       .populate("categoryId");
-      console.log(product);
-    res.render("products", { product });
+      if(product.length > 0){
+        categoryName = product[0].categoryId.title
+      }
+    res.render("products", { product, categoryName });
   } catch (error) {
     console.log(error);
     res.status(500).render("500");
