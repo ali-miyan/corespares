@@ -39,6 +39,12 @@
                                     id="description" class="form-control" rows="4"></input>
                                 <span id="desc-error" style="color: red;"></span>
                             </div>
+                            <div class="mb-4">
+                                <label class="form-label">Features</label>
+                                <input placeholder="Type here" value="<%= products.features%>" name="feature" id="feature" class="form-control"
+                                    rows="4"></input>
+                                <span id="featureError" style="color: red;"></span>
+                            </div>
                             <input type="hidden" value="<%= products._id%>" id="id" name="id"></input>
                             <div>
                                 <button type="button" onclick="submitEditProduct()"
@@ -54,7 +60,7 @@
                     <label class="form-label">Choose a Category</label>
                     <select id="id_select2_example" style="max-width: 250px; max-height: 250px;" class="form-select">
                         <% categories.forEach(function(item) { %>
-                            <option value="<%= item._id%>" data-img_src="/public/categoryimages/<%= item.imageUrl%>">
+                            <option value="<%= item._id %>" data-img_src="/public/categoryimages/<%= item.imageUrl %>" <%= (item._id.toString() == products.categoryId._id.toString()) ? 'selected' : '' %>>
                                 <%= item.title %>
                             </option>
                             <% }); %>
@@ -72,7 +78,7 @@
                     <div id="imageContainer">
                         <% products.images.forEach(function(item) { %>
                             <div style="margin: 4px;">
-                                <img src="/public/productimages/<%=item%>"
+                                <img src="/public/sharpimages/<%=item%>"
                                     style="max-width: 100%; object-fit: contain;" />
                             </div>
                             <% }); %>
@@ -165,6 +171,8 @@
             const titError = document.getElementById("title-error")
             const description = document.getElementById("description").value;
             const descError = document.getElementById("desc-error")
+            const feature = document.getElementById("feature").value;
+            const featureError = document.getElementById("feature-error")
             const quantity = document.getElementById("quantity").value;
             const quantityError = document.getElementById("quantity-error")
             const price = document.getElementById("price").value;
@@ -197,6 +205,11 @@
                 clearError(descError, 2500);
                 return;
             }
+            if (feature.trim() == "") {
+                featureError.textContent = "Features is required!";
+                clearError(featureError, 2500);
+                return;
+            }
             if (files && image.files.length === 0) {
                 imgError.textContent = "Image is required!";
                 clearError(imgError, 2500);
@@ -213,6 +226,7 @@
             formData.append('title', title);
             formData.append('id', id);
             formData.append('description', description);
+            formData.append('feature', feature);
             formData.append('price', price);
             formData.append('quantity', quantity);
             formData.append('category', category);

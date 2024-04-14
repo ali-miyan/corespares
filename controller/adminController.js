@@ -95,7 +95,6 @@ const deleteCategory = async (req, res) => {
 const categoryStatus = async (req, res) => {
   try {
     const { categoryId, isBlocked } = req.body;
-    console.log(isBlocked);
     await categoryModel.updateOne(
       { _id: categoryId },
       { is_blocked: !isBlocked }
@@ -110,7 +109,6 @@ const categoryStatus = async (req, res) => {
 const categoryEdit = async (req, res) => {
   try {
     const { title, description, id } = req.body;
-    console.log(req.body, req.file);
     let imageUrlToUpdate = null;
 
     if (req.file) {
