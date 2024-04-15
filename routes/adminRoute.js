@@ -26,16 +26,10 @@ adminRoute.get("/",auth.isLogout, admincontrollers.loadAdminLogin);
 adminRoute.post("/admin-login",auth.isLogout,admincontrollers.adminLogin);
 adminRoute.get("/category", auth.isLogin,admincontrollers.loadCategory);
 adminRoute.get("/add-category",auth.isLogin, admincontrollers.addCategory);
-adminRoute.post("/add-category", auth.isLogin,admincontrollers.addCategoryPost);
 adminRoute.delete("/delete-category",auth.isLogin, admincontrollers.deleteCategory);
 adminRoute.patch('/category-status', auth.isLogin,admincontrollers.categoryStatus)
 adminRoute.get('/admin-logout',admincontrollers.adminLogout)
-adminRoute.get("/", admincontrollers.loadAdminLogin);
-adminRoute.post("/admin-login", admincontrollers.adminLogin);
-adminRoute.get("/category", admincontrollers.loadCategory);
-adminRoute.get("/add-category", admincontrollers.addCategory);
 adminRoute.post("/add-categories",multer.uploadproduct,admincontrollers.addCategoryPost);
-adminRoute.delete("/delete-category", admincontrollers.deleteCategory);
 adminRoute.get("/products", productController.loadProducts);
 adminRoute.get("/add-products", productController.loadAddProducts);
 adminRoute.post("/add-product",multer.uploadMultiple, productController.addProductPost);
