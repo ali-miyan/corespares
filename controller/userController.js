@@ -5,6 +5,7 @@ const loadUserHome = async (req, res) => {
   try {
     const category = await categoryModel.find({ is_blocked: false });
     const product = await productModel.find({ is_blocked: false });
+    console.log(product);
     res.render("home", { category ,product});
   } catch (error) {
     console.log(error);
@@ -22,7 +23,10 @@ const loadUserShop = async (req, res) => {
       if(product.length > 0){
         categoryName = product[0].categoryId.title
       }
-    res.render("products", { product, categoryName });
+
+    const categories = await categoryModel.find({is_blocked:false})
+
+    res.render("products", { product, categoryName ,categories});
   } catch (error) {
     console.log(error);
     res.status(500).render("500");

@@ -1,10 +1,10 @@
 const { features } = require("process");
 const categoryModel = require("../models/category-model");
 const productModel = require("../models/product-model");
-const { createCanvas, loadImage } = require('canvas');
+// const { createCanvas, loadImage } = require('canvas');
 const fs = require("fs")
-const sizeOf = require('image-size');
-const sharp = require("sharp");
+// const sizeOf = require('image-size');
+// const sharp = require("sharp");
 const e = require("express");
 
 const loadProducts = async (req, res) => {
