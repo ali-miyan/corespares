@@ -4,7 +4,8 @@ const productModel = require("../models/product-model");
 const loadUserHome = async (req, res) => {
   try {
     const category = await categoryModel.find({ is_blocked: false });
-    res.render("home", { category });
+    const product = await productModel.find({ is_blocked: false });
+    res.render("home", { category ,product});
   } catch (error) {
     console.log(error);
     res.status(500).render("500");
