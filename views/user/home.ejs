@@ -254,7 +254,7 @@
         "slidesToShow": 1,
         "slidesToScroll": 1,
         "responsive": [
-            {
+            {   
 	                "breakpoint": 1260,
 	                "settings": {
 	                    "slidesToScroll": 1,
@@ -286,46 +286,30 @@
 				}
         ]
     }'>
-                                <% category.forEach(function(category) { %>
+    <% category.forEach(function(category) { %>
 
-                                    <div
-                                        class="productCarousel-slide product-layout product-grid mx-2 border-effect">
-                                        <article class="product-item-container" style="border: hidden;">
-                                            <div
-                                                
-                                                class="left-block align-items-center p-4     justify-content-center" style="height: auto; display: grid; align-items: center;">
-                                                <a href="/shop/<%=category._id%>" class="product-item-photo">
-                                                    
-                                                    <img class="img-responsive lazyload zoom-effect" data-sizes="auto"
-                                                        src="/public/categoryimages/<%= category.imageUrl %>"
-                                                        alt="Xerat fulicom lan" title="Xerat fulicom lan">
-                                                </a>
-                                                <div class="right-block" >
+        <div class="categ productCarousel-slide product-layout product-grid mx-2 border-effect">
+            <article class="product-item-container hover-effect" style="border: 1px solid transparent;" onmouseover="this.style.transition = 'border-color 0.5s'; this.style.borderColor='#b72222'; this.querySelector('img').style.transition = 'transform 0.5s'; this.querySelector('img').style.transform='scale(1.1)';" onmouseout="this.style.transition = 'border-color 0.5s'; this.style.borderColor='transparent'; this.querySelector('img').style.transition = 'transform 0.5s'; this.querySelector('img').style.transform='scale(1)';">
+                <div class="left-block align-items-center p-4 justify-content-center" style="height: auto; display: grid; align-items: first baseline; position: relative;">
+                    <a href="/shop/<%=category._id%>" class="product-item-photo">
+                        <!-- Apply fixed size for the image -->
+                        <img class="img-responsive lazyload zoom-effect" data-sizes="auto" style="max-width: 140px; margin-bottom: 20px; max-height: 100px;" src="/public/categoryimages/<%= category.imageUrl %>" alt="Xerat fulicom lan" title="Xerat fulicom lan">
+                    </a>
+                    <!-- Separate container for the title -->
+                    <div class="title-container" style="position: absolute; bottom: 10px; left: 0; width: 100%;">
+                        <h4 class="card-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <!-- Ensure title displays in a single line -->
+                            <a href="/shop/<%=category._id%>"><%=category.title%></a>
+                        </h4>
+                    </div>
+                </div>
+            </article>
+        </div>
     
-                                                    <h4 class="card-title">
-                                                        <a href="/shop/<%=category._id%>">
-                                                            <%=category.title%>
-                                                        </a>
+    <% }) %>
+
+
     
-                                                    </h4>
-                                                   
-                                                </div>
-                                            </div>
-                                            <style>
-                                                .zoom-effect {
-                                                    transition: transform 0.5s ease;
-                                                }
-
-                                                .zoom-effect:hover {
-                                                    transform: scale(1.1);
-                                                }
-                                                
-                                            </style>
-
-                                        </article>
-                                    </div>
-                                    <% }) %>
-                                    <style></style>
 
                         </div>
                     </div>
