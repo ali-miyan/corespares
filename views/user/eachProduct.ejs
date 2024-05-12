@@ -305,14 +305,14 @@
                                                         itemprop="name"><strong>
                                                             <%=product.categoryId.title%>
                                                         </strong></span></a></dd>
+                                                        <dt class="productView-info-name">Part Number</dt>
+                                                        <dd class="productView-info-value"><strong><%=product.description%></strong></dd>
                                             <dt class="productView-info-name">Quantity:</dt>
                                             <dd class="productView-info-value" data-product-sku>
                                                 <%=product.quantity%>
                                             </dd>
                                             <dt class="productView-info-name">Condition:</dt>
                                             <dd class="productView-info-value">New</dd>
-                                            <dt class="productView-info-name">Minimum Purchase:</dt>
-                                            <dd class="productView-info-value">1 unit</dd>
                                             <dt class="productView-info-name">Maximum Purchase:</dt>
                                             <dd class="productView-info-value">10 units</dd>
 
@@ -442,7 +442,6 @@
                                     <div class="tab-content is-active" id="tab-description">
 
                                         <h3>Features:</h3>
-                                        <p>Unrivaled display performance</p>
                                         <ul class="feature-list">
                                             <% var featuresArray=product.features.split('-');
                                                 featuresArray.forEach(function(feature) { %>
