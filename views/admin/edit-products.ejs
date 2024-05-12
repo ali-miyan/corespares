@@ -34,17 +34,20 @@
 
 
                             <div class="mb-4">
-                                <label class="form-label">Full description</label>
+                                <label class="form-label">Part Number</label>
                                 <input placeholder="Type here" value="<%= products.description%>" name="description"
                                     id="description" class="form-control" rows="4"></input>
                                 <span id="desc-error" style="color: red;"></span>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label">Features</label>
-                                <input placeholder="Type here" value="<%= products.features%>" name="feature" id="feature" class="form-control"
-                                    rows="4"></input>
+                                <input placeholder="Type here" value="<%= products.features%>" name="feature" id="feature" class="form-control" rows="4"></input>
                                 <span id="featureError" style="color: red;"></span>
+                                <p style="margin-top: 5px; font-size: 14px; color: #427db8;">
+                                    • please ensure to include a hyphen (' - ') after each feature for the next line.
+                                </p>
                             </div>
+                            
                             <input type="hidden" value="<%= products._id%>" id="id" name="id"></input>
                             <div>
                                 <button type="button" onclick="submitEditProduct()"
