@@ -216,15 +216,6 @@ const editProductPost = async (req, res) => {
 const deleteProduct = async (req, res) => {
   try {
     const id = req.body.productId;
-    const product = await productModel.findById(id);
-    const imageFilenames = product.images;
-    imageFilenames.forEach(imageFilename => {
-      const imagePath = "public/productimages/" + imageFilename;
-      if (fs.existsSync(imagePath)) {
-        fs.unlinkSync(imagePath);
-      }
-    });
-
     const deletedProduct = await productModel.deleteOne({ _id: id });
     if (deletedProduct.deletedCount === 1) {
       res.json({ ok: true });
