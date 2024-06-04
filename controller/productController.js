@@ -5,7 +5,6 @@ const { createCanvas, loadImage } = require('canvas');
 const fs = require("fs")
 const sizeOf = require('image-size');
 const sharp = require("sharp");
-const e = require("express");
 
 const loadProducts = async (req, res) => {
   try {
@@ -104,12 +103,6 @@ const addProductPost = async (req, res) => {
       }
     }
 
-    const existingProduct = await productModel.findOne({
-      name: { $regex: new RegExp(title, "i") },
-    });
-    if (existingProduct) {
-      return res.json({ exits: true });
-    }
     const newProduct = new productModel({
       name: title,
       quantity: quantity,
