@@ -1,0 +1,257 @@
+<%- include('../partials/product-partial.ejs') -%>
+    <section class="content-main">
+        <div class="row">
+            <div class="col-9">
+                <div class="content-header">
+                    <h2 class="content-title">Add New Product</h2>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Basic</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="product" enctype="multipart/form-data">
+                            <div class="mb-4">
+                                <label for="product_name" class="form-label">Product Name</label>
+                                <input type="text" placeholder="Type here" name="title" class="form-control"
+                                    id="title" />
+                                <span id="title-error" style="color: red;"></span>
+                            </div>
+                            <div class="mb-4">
+                                <label for="product_price" class="form-label">Price</label>
+                                <input type="number" placeholder="Type here" name="price" class="form-control"
+                                    id="price" />
+                                <span id="price-error" style="color: red;"></span>
+                            </div>
+                            <div class="mb-4">
+                                <label for="product_quantity" class="form-label">Quantity</label>
+                                <input type="number" placeholder="Type here" name="quantity" class="form-control"
+                                    id="quantity" />
+                                <span id="quantity-error" style="color: red;"></span>
+                            </div>
+
+
+                            <div class="mb-4">
+                                <label class="form-label">Part number</label>
+                                <input placeholder="Type here" name="description" id="description" class="form-control"
+                                    rows="4"></input>
+                                <span id="desc-error" style="color: red;"></span>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Features</label>
+                                <input placeholder="Type here" name="feature" id="feature" class="form-control"
+                                    rows="4"></input>
+                                <span id="featureError" style="color: red;"></span>
+                                <p style="margin-top: 5px; font-size: 14px; color: #427db8;">
+                                    • please ensure to include a hyphen (' - ') after each feature for the next line.
+                                </p>
+                            </div>
+
+                            <div>
+                                <button type="button" onclick="submitProduct()"
+                                    class="btn btn-md rounded font-sm hover-up">Add</button>
+                                <button type="button" style="border: none; background: none;"> <a href="/admin/products"
+                                        class="btn btn-md rounded font-sm hover-up">Back</a></button>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="mb-4">
+                    <label class="form-label">Choose a Category</label>
+                    <select id="id_select2_example" style="max-width: 250px; max-height: 250px;" class="form-select">
+                        <% categories.forEach(function(item) { %>
+                            <option value="<%= item._id%>" data-img_src="/public/categoryimages/<%= item.imageUrl%>">
+                                <%= item.title %>
+                            </option>
+                            <% }); %>
+                    </select>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Media</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="input-upload">
+                            <input class="form-control" type="file" id="imageFile" name="image" multiple
+                                onchange="previewImages(this, 'previewImages')" />
+                            <span style="color: red;" id="image-error"></span>
+                        </div>
+                        <div id="previewImages" style="margin-top: 10px;"></div>
+                    </div>
+
+                </div>
+            </div>
+            </form>
+        </div>
+    </section>
+
+    </main>
+    <script src="/public/assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/public/assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/public/assets/js/vendors/select2.min.js"></script>
+    <script src="/public/assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/public/assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="/public/assets/js/main.js?v=1.1" type="text/javascript"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script defer src="https://cdn.crop.guide/loader/l.js?c=123ABC">
+    </script>
+    
+    
+    <script type="text/javascript">
+        function custom_template(obj) {
+            var data = $(obj.element).data();
+            var text = $(obj.element).text();
+            if (data && data['img_src']) {
+                img_src = data['img_src'];
+                template = $("<div><img src=\"" + img_src + "\" style=\"width:100%;height:150px;margin-top: 15px;\"/><p style=\"font-weight: 700;font-size:14pt;text-align:center;\">" + text + "</p></div>");
+                return template;
+            }
+        }
+        var options = {
+            'templateSelection': custom_template,
+            'templateResult': custom_template,
+        }
+        $('#id_select2_example').select2(options);
+        $('.select2-container--default .select2-selection--single').css({ 'height': '220px' });
+
+
+        function clearError(element, time) {
+            setTimeout(() => (element.textContent = ""), time);
+        }
+        function previewImages(input, previewId) {
+            const preview = document.getElementById(previewId);
+            preview.innerHTML = '';
+
+            if (input.files) {
+                [...input.files].forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const image = new Image();
+                        image.src = e.target.result;
+                        image.style.maxWidth = '100%';
+                        const container = document.createElement('div');
+                        container.style.position = 'relative';
+
+                        container.appendChild(image);
+
+                        preview.appendChild(container);
+                    };
+
+                    reader.readAsDataURL(file);
+                });
+                const clearButton = document.createElement('button');
+                clearButton.textContent = 'remove';
+                clearButton.classList.add('bg-danger', 'rounded', 'font-sm', 'my-2', 'hover-up');
+                clearButton.addEventListener('click', function () {
+                    preview.innerHTML = '';
+                    input.value = '';
+                });
+                preview.appendChild(clearButton);
+            }
+        }
+
+
+
+        function submitProduct() {
+            const title = document.getElementById("title").value;
+            const titError = document.getElementById("title-error")
+            const description = document.getElementById("description").value;
+            const descError = document.getElementById("desc-error")
+            const feature = document.getElementById("feature").value;
+            const featureError = document.getElementById("feature-error")
+            const quantity = document.getElementById("quantity").value;
+            const quantityError = document.getElementById("quantity-error")
+            const price = document.getElementById("price").value;
+            const priceError = document.getElementById("price-error")
+            const image = document.getElementById('imageFile');
+            const category = document.getElementById('id_select2_example').value;
+            const imgError = document.getElementById("image-error")
+            const files = image.files
+
+
+            console.log(files);
+
+            if (title.trim() == "") {
+                titError.textContent = "Title is required!";
+                clearError(titError, 2500);
+                return;
+            }
+            if (price.trim() == "") {
+                priceError.textContent = "Price is required!";
+                clearError(priceError, 2500);
+                return;
+            }
+            if (quantity.trim() == "") {
+                quantityError.textContent = "Quantity is required!";
+                clearError(quantityError, 2500);
+                return;
+            }
+            if (description.trim() == "") {
+                descError.textContent = "Description is required!";
+                clearError(descError, 2500);
+                return;
+            }
+            if (feature.trim() == "") {
+                featureError.textContent = "Features is required!";
+                clearError(featureError, 2500);
+                return;
+            }
+            if (image.files.length === 0) {
+                imgError.textContent = "Image is required!";
+                clearError(imgError, 2500);
+                return;
+            }
+            if (image.files.length > 5) {
+                imgError.textContent = "Maximum 5 images only!";
+                clearError(imgError, 2500);
+                return;
+            }
+
+
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('description', description);
+            formData.append('feature', feature);
+            formData.append('price', price);
+            formData.append('quantity', quantity);
+            formData.append('category', category);
+            if (files.length > 0) {
+                for (let i = 0; i < files.length; i++) {
+                    formData.append('images', files[i]);
+                }
+            }
+            fetch('/admin/add-product', {
+                method: 'POST',
+                body: formData,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Product added successfully!",
+                            icon: "success"
+                        }).then(() => {
+                            location.href = '/admin/products';
+                        });
+                    } else if (data.exits) {
+                        titError.textContent = "This title already exists!";
+                        clearError(titError, 2500);
+                        return;
+                    } else {
+                        console.log(data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+    </script>
+    </body>
+
+    </html>

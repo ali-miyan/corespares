@@ -1,0 +1,166 @@
+<%- include('../partials/product-partial.ejs') -%>
+  <section class="content-main">
+    <div class="content-header">
+      <h2 class="content-title">Product list</h2>
+      <div>
+        <a href="/admin/add-products" class="btn btn-primary"> Create new</a>
+      </div>
+    </div>
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="table-responsive">
+          <% if (products && products.length> 0) { %>
+          <table id="tablePagination" class="table table-hover">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Category</th>
+                <th>status</th>
+                <th>Action</th>
+                <th>Edit</th>
+              </tr>
+            </thead>
+            <tbody>
+                <% products.forEach(function(product, index) { %>
+                  <tr>
+                    <td>
+                      <img src="/public/productimages/<%= product.images[0]%>" class="img-sm img-avatar"
+                        alt="Userpic" />
+                    </td>
+                    <td>
+                      <h6 class="mb-0 title">
+                        <%= product.name%>
+                      </h6>
+                    </td>
+                    <td>
+                      <%= product.price%>
+                    </td>
+                    <td>
+                      <%= product.quantity%>
+                    </td>
+                    <td>
+                      <%= product.categoryId?.title%>
+                    </td>
+                    <td>
+                      <div class="switch">
+                        <label>
+                          <input type="checkbox" onclick="updateBlockStatus('<%=index%>')" <%=product.is_blocked ? ""
+                            : "checked" %>
+                          data-product-id="<%= product._id %>"
+                            id="blockToggle<%=index%>">
+                              <span class="slider round"></span>
+                              <span class="on-label">On</span>
+                              <span class="off-label">Off</span>
+                        </label>
+                      </div>
+                    </td>
+                    <td>
+                      <button id="showalert" onclick="confirmDelete('<%= product._id %>')"
+                        class="btn rounded font-sm hover-up">
+                        <i class="material-icons md-delete"></i>
+                      </button>
+                    </td>
+                    <td>
+                      <a href="/admin/edit-product?id=<%=product._id%>"
+                        class="btn btn-sm btn-brand rounded font-sm">Edit</a>
+                    </td>
+                  </tr>
+                  <%})%>
+                </tbody>
+              </table>
+              <% } else { %>
+                <h1 class="text-center">no products available....</h1>
+                <% } %>
+        </div>
+      </div>
+    </div>
+  </section>
+  </main>
+  <script>
+    function confirmDelete(productId) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to delete this product!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          deleteProduct(productId);
+        }
+      });
+    }
+
+    function deleteProduct(productId) {
+      fetch("/admin/delete-product", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ productId: productId }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.ok) {
+            window.location.reload();
+          }
+        })
+        .catch((error) => {
+          console.error("Error deleting product:", error);
+        });
+    }
+  </script>
+  <script>
+
+    function updateBlockStatus(index) {
+      console.log(index);
+      var blockToggle = document.getElementById(`blockToggle${index}`);
+      var isBlocked = blockToggle.checked;
+      var productId = blockToggle.getAttribute("data-product-id");
+      console.log(productId, isBlocked);
+      fetch("/admin/product-status", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productId: productId,
+          isBlocked: isBlocked,
+        }),
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log("Block status updated successfully");
+          } else {
+            console.error("Failed to update block status");
+          }
+        })
+        .catch((error) => {
+          console.error("Error updating block status:", error);
+        });
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="/public/assets/js/vendors/jquery-3.6.0.min.js"></script>
+  <script src="/public/assets/js/vendors/bootstrap.bundle.min.js"></script>
+  <script src="/public/assets/js/vendors/select2.min.js"></script>
+  <script src="/public/assets/js/vendors/perfect-scrollbar.js"></script>
+  <script src="/public/assets/js/vendors/jquery.fullscreen.min.js"></script>
+  <script src="/public/assets/js/main.js?v=1.1" type="text/javascript"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" charset="utf8"
+    src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#tablePagination').DataTable();
+    });
+  </script>
+  </body>
+
+  </html>

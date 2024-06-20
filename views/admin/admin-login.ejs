@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Nest Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:title" content="" />
+    <meta property="og:type" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+    <!-- Favicon -->
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href=""
+    />
+    <!-- Template CSS -->
+    <link
+      href="/public/assets/css/main.css?v=1.1"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+
+  <body style="overflow: hidden;">
+    <main><br><br>
+      <section class="content-main mt-80 mb-80">
+        <div class="card mx-auto card-login">
+          <div class="card-body">
+            <h4 class="card-title text-center mb-4">Login</h4>
+            <form onsubmit="verification(event)">
+              <div class="mb-3">
+                <input
+                  class="form-control"
+                  id="email"
+                  name="email"
+                  placeholder="email"
+                  type="text"
+                />
+                <span style="color: red" id="email-error"></span>
+              </div>
+
+              <div class="mb-3">
+                <input
+                  class="form-control"
+                  id="password"
+                  placeholder="Password"
+                  type="password"
+                  name="password"
+                />
+                <span style="color: red" id="password-error"></span>
+              </div>
+              <div class="mb-4">
+                <button type="submit" class="btn btn-primary w-100">
+                  Login
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+      
+    </main>
+    <script src="/public/assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/public/assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/public/assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+
+    <script>
+      async function verification(e) {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const emailError = document.getElementById("email-error");
+        const passwordError = document.getElementById("password-error");
+
+        if (email.trim() == "") {
+          emailError.textContent = "Email is required!";
+          clearError(emailError, 2000);
+        } else if (password.trim() == "") {
+          passwordError.textContent = "Password is required!";
+          clearError(passwordError, 2000);
+        } else if (password.trim().length < 8) {
+          passwordError.textContent =
+            "Password length must be greater than or equal to 8!";
+          clearError(passwordError, 2000);
+        } else if (
+          !/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)
+        ) {
+          emailError.textContent = "Enter valid email format";
+          clearError(emailError, 2000);
+        } else {
+          try {
+            const response = await fetch("/admin/admin-login", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email, password }),
+            });
+            const data = await response.json();
+            console.log(data);
+            if (data.success) {
+              window.location.href = "/admin/category";
+            } else if (data.wrongPass) {
+              passwordError.textContent = "Password is incorrect!";
+              clearError(passwordError, 2000);
+            } else if (data.wrongEmail) {
+              emailError.textContent = "Email is incorrect!";
+              clearError(emailError, 2000);
+            } else if (data.redirectPath) {
+              window.location.href = data.redirectPath;
+            }
+          } catch (error) {
+            console.error("Error:", error);
+          }
+        }
+      }
+
+      function clearError(element, time) {
+        setTimeout(() => (element.textContent = ""), time);
+      }
+    </script>
+
+    <script
+      src="/public/assets/js/main.js?v=1.1"
+      type="text/javascript"
+    ></script>
+  </body>
+</html>
