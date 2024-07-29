@@ -5,6 +5,26 @@ const { createCanvas, loadImage } = require('canvas');
 const fs = require("fs")
 const sizeOf = require('image-size');
 const sharp = require("sharp");
+const cloudinary = require("cloudinary").v2;
+const { Readable } = require('stream');
+
+
+const uploadToCloudinary = (fileBuffer) => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { folder: 'products' }, // Specify your folder name here
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result.secure_url);
+        }
+      }
+    );
+    const stream = Readable.from(fileBuffer);
+    stream.pipe(uploadStream);
+  });
+};
 
 const loadProducts = async (req, res) => {
   try {
@@ -44,65 +64,72 @@ const editProduct = async (req, res) => {
 const addProductPost = async (req, res) => {
   try {
     const { title, description, price, quantity, category, feature } = req.body;
-    const imageFilenames = req.files.map(file => file.filename);
 
-    for (let i = 0; i < imageFilenames.length; i++) {
-      if (imageFilenames[i]) {
-        const dimensions = sizeOf(`public/productimages/${imageFilenames[i]}`);
+    // Ensure files are uploaded with multer before this function is called
+    const files = req.files; // Array of files uploaded
+
+    // Array to store image URLs
+    const imageUrls = [];
+
+    // Process and upload each image
+    for (const file of files) {
+      if (file.buffer) {
+        // Get dimensions of the image
+        const dimensions = sizeOf(file.buffer);
         const { width, height } = dimensions;
-        console.log(width, height);
+        
+        let canvasWidth, canvasHeight;
 
-        let canvasWidth;
-        let canvasHeight;
+        // Determine canvas size based on image dimensions
         if (width < 200 && height > 500) {
           canvasWidth = 900;
-          canvasHeight = 750
-        }
-        else if (width <= 550 && height <= 550) {
+          canvasHeight = 750;
+        } else if (width <= 550 && height <= 550) {
           canvasWidth = 700;
           canvasHeight = 550;
-        }
-        else if (height <= 300) {
+        } else if (height <= 300) {
           canvasWidth = 700;
-          canvasHeight = 600
-        }
-        else if (width <= 400) {
+          canvasHeight = 600;
+        } else if (width <= 400) {
           canvasWidth = 800;
-          canvasHeight = 600
-        }
-        else if (height > 1400) {
+          canvasHeight = 600;
+        } else if (height > 1400) {
           canvasWidth = 1800;
           canvasHeight = 1400;
-        }
-        else {
+        } else {
           canvasWidth = 1500;
           canvasHeight = 1200;
         }
 
-        const image = await loadImage(`public/productimages/${imageFilenames[i]}`);
+        // Load image
+        const image = await loadImage(file.buffer);
 
-
+        // Create canvas and draw the image
         const canvas = createCanvas(canvasWidth, canvasHeight);
         const ctx = canvas.getContext('2d');
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Calculate the position to center the image
+        // Calculate position to center image
         const x = (canvas.width - image.width) / 2;
         const y = (canvas.height - image.height) / 2;
 
-        // Draw the image onto the canvas
+        // Draw image onto canvas
         ctx.drawImage(image, x, y);
 
-        // Convert the canvas to a buffer
+        // Convert canvas to buffer
         const buffer = canvas.toBuffer('image/jpeg');
 
-        // Use Sharp to resize the image
-        await sharp(buffer)
-          .toFile(`public/sharpimages/${imageFilenames[i]}`);
+        // Use Sharp to process the image further (if needed)
+        const processedBuffer = await sharp(buffer).toBuffer();
+
+        // Upload the processed image to Cloudinary
+        const imageUrl = await uploadToCloudinary(processedBuffer);
+        imageUrls.push(imageUrl);
       }
     }
 
+    // Create and save new product
     const newProduct = new productModel({
       name: title,
       quantity: quantity,
@@ -110,89 +137,93 @@ const addProductPost = async (req, res) => {
       categoryId: category,
       description: description,
       features: feature,
-      images: imageFilenames,
+      images: imageUrls, // Store the URLs of the uploaded images
     });
+
     await newProduct.save();
-    return res.json({ ok: true, message: "Category created successfully" });
+    return res.json({ ok: true, message: "Product created successfully" });
   } catch (err) {
     console.error(err);
     res.status(500).render('500');
-    return res.json({ ok: false, message: "Category created successfully" });
+    return res.json({ ok: false, message: "Failed to create product" });
   }
 };
 const editProductPost = async (req, res) => {
   try {
     const { title, description, price, quantity, category, id, feature } = req.body;
-    let imageFilenames = [];
+    let imageUrls = [];
 
     if (req.files && req.files.length > 0) {
-      imageFilenames = req.files.map(file => file.filename);
-      for (let i = 0; i < imageFilenames.length; i++) {
-        if (imageFilenames[i]) {
-          // Load the image using Canvas
+      const files = req.files; // Array of uploaded files
 
-          const dimensions = sizeOf(`public/productimages/${imageFilenames[i]}`);
+      // Process and upload each image
+      for (const file of files) {
+        if (file.buffer) {
+          // Get dimensions of the image
+          const dimensions = sizeOf(file.buffer);
           const { width, height } = dimensions;
           console.log(width, height);
 
-          let canvasWidth;
-          let canvasHeight;
+          let canvasWidth, canvasHeight;
+
+          // Determine canvas size based on image dimensions
           if (width < 200 && height > 500) {
             canvasWidth = 900;
-            canvasHeight = 750
-          }
-          else if (width <= 550 && height <= 550) {
+            canvasHeight = 750;
+          } else if (width <= 550 && height <= 550) {
             canvasWidth = 700;
             canvasHeight = 550;
-          }
-          else if (height <= 300) {
+          } else if (height <= 300) {
             canvasWidth = 700;
-            canvasHeight = 600
-          }
-          else if (width <= 400) {
+            canvasHeight = 600;
+          } else if (width <= 400) {
             canvasWidth = 800;
-            canvasHeight = 600
-          }
-          else if (height > 1400) {
+            canvasHeight = 600;
+          } else if (height > 1400) {
             canvasWidth = 1800;
             canvasHeight = 1400;
-          }
-          else {
+          } else {
             canvasWidth = 1500;
             canvasHeight = 1200;
           }
 
-          const image = await loadImage(`public/productimages/${imageFilenames[i]}`);
+          // Load image
+          const image = await loadImage(file.buffer);
 
-
+          // Create canvas and draw the image
           const canvas = createCanvas(canvasWidth, canvasHeight);
-          // Create a new canvas with a white background
           const ctx = canvas.getContext('2d');
           ctx.fillStyle = '#ffffff';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-          // Calculate the position to center the image
+          // Calculate position to center image
           const x = (canvas.width - image.width) / 2;
           const y = (canvas.height - image.height) / 2;
 
-          // Draw the image onto the canvas
+          // Draw image onto canvas
           ctx.drawImage(image, x, y);
 
-          // Convert the canvas to a buffer
+          // Convert canvas to buffer
           const buffer = canvas.toBuffer('image/jpeg');
 
-          // Use Sharp to resize the image
-          await sharp(buffer)
-            .toFile(`public/sharpimages/${imageFilenames[i]}`);
+          // Use Sharp to process the image further (if needed)
+          const processedBuffer = await sharp(buffer).toBuffer();
+
+          // Upload the processed image to Cloudinary
+          const imageUrl = await uploadToCloudinary(processedBuffer);
+          imageUrls.push(imageUrl);
         }
       }
     } else {
+      // If no new files, use existing images
       const existingProduct = await productModel.findById(id);
       if (existingProduct) {
-        imageFilenames = existingProduct.images;
+        imageUrls = existingProduct.images;
       }
     }
-    await productModel.findByIdAndUpdate(
+
+    // Update the product with new details
+    const updatedProduct = await productModel.findByIdAndUpdate(
       id,
       {
         name: title,
@@ -201,15 +232,16 @@ const editProductPost = async (req, res) => {
         categoryId: category,
         description: description,
         features: feature,
-        images: imageFilenames,
+        images: imageUrls, // Update images with new URLs
       },
       { new: true }
     );
-    return res.json({ ok: true, message: "Product created successfully" });
+
+    return res.json({ ok: true, message: "Product updated successfully", product: updatedProduct });
   } catch (err) {
     console.error(err);
     res.status(500).render('500');
-    return res.json({ ok: false, message: "Product created successfully" });
+    return res.json({ ok: false, message: "Failed to update product" });
   }
 };
 

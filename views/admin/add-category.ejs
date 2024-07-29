@@ -28,7 +28,7 @@
                             </div>
 
                             <div>
-                                <button type="button" onclick="submitCategory()"
+                                <button type="button" onclick="submitCategory(this)"
                                     class="btn btn-md rounded font-sm hover-up">Add</button>
                                 <button type="button" style="border: none; background: none;"> <a href="/admin/category"
                                         class="btn btn-md rounded font-sm hover-up">Back</a></button>
@@ -70,8 +70,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        function submitCategory() {
-
+        function submitCategory(button) {
+            
             const title = document.getElementById("title").value;
             const titError = document.getElementById("title-error")
             const description = document.getElementById("description").value;
@@ -95,7 +95,9 @@
                 clearError(imgError, 2500);
                 return;
             }
-
+            button.disabled = true;
+            button.textContent = 'Submitting...';
+            
             const formData = new FormData();
             formData.append('title', title);
             formData.append('description', description);

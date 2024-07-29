@@ -293,7 +293,7 @@
                 <div class="left-block align-items-center p-4 justify-content-center" style="height: auto; display: grid; align-items: first baseline; position: relative;">
                     <a href="/shop/<%=category._id%>" class="product-item-photo">
                         <!-- Apply fixed size for the image -->
-                        <img class="img-responsive lazyload zoom-effect" data-sizes="auto" style="max-width: 140px; margin-bottom: 20px; max-height: 100px;" src="/public/categoryimages/<%= category.imageUrl %>" alt="Xerat fulicom lan" title="Xerat fulicom lan">
+                        <img class="img-responsive lazyload zoom-effect" data-sizes="auto" style="max-width: 140px; margin-bottom: 20px; max-height: 100px;" src="<%= category.imageUrl %>" alt="loading..." title="Xerat fulicom lan">
                     </a>
                     <!-- Separate container for the title -->
                     <div class="title-container" style="position: absolute; bottom: 10px; left: 0; width: 100%;">
@@ -398,7 +398,7 @@
                                         <div class="left-block d-flex align-items-center justify-content-center">
                                             <a href="/product-details/<%=product._id%>" class="product-item-photo">
                                                 <img class="img-responsive lazyload" data-sizes="auto"
-                                                    src="/public/sharpimages/<%=product.images[0]%>"
+                                                    src="<%=product.images[0]%>"
                                                     alt="loadin...">
                                             </a>
 

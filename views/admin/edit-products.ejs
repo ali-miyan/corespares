@@ -41,7 +41,7 @@
                             </div>
                             <div class="mb-4">
                                 <label class="form-label">Features</label>
-                                <input placeholder="Type here" value="<%= products.features%>" name="feature" id="feature" class="form-control" rows="4"></input>
+                                <textarea placeholder="Type here" name="feature" id="feature" class="form-control" rows="4"><%= products.features %></textarea>
                                 <span id="featureError" style="color: red;"></span>
                                 <p style="margin-top: 5px; font-size: 14px; color: #427db8;">
                                     • please ensure to include a hyphen (' - ') after each feature for the next line.
@@ -50,7 +50,7 @@
                             
                             <input type="hidden" value="<%= products._id%>" id="id" name="id"></input>
                             <div>
-                                <button type="button" onclick="submitEditProduct()"
+                                <button type="button" onclick="submitEditProduct(this)"
                                     class="btn btn-md rounded font-sm hover-up">Add</button>
                                 <button type="button" style="border: none; background: none;"> <a href="/admin/products"
                                         class="btn btn-md rounded font-sm hover-up">Back</a></button>
@@ -63,7 +63,7 @@
                     <label class="form-label">Choose a Category</label>
                     <select id="id_select2_example" style="max-width: 250px; max-height: 250px;" class="form-select">
                         <% categories.forEach(function(item) { %>
-                            <option value="<%= item._id %>" data-img_src="/public/categoryimages/<%= item.imageUrl %>" <%= (item._id.toString() == products.categoryId._id.toString()) ? 'selected' : '' %>>
+                            <option value="<%= item._id %>" data-img_src="<%= item.imageUrl %>" <%= (item._id.toString() == products.categoryId._id.toString()) ? 'selected' : '' %>>
                                 <%= item.title %>
                             </option>
                             <% }); %>
@@ -81,7 +81,7 @@
                     <div id="imageContainer">
                         <% products.images.forEach(function(item) { %>
                             <div style="margin: 4px;">
-                                <img src="/public/sharpimages/<%=item%>"
+                                <img src="<%=item%>"
                                     style="max-width: 100%; object-fit: contain;" />
                             </div>
                             <% }); %>
@@ -169,7 +169,8 @@
 
 
 
-        function submitEditProduct() {
+        function submitEditProduct(button) {
+            
             const title = document.getElementById("title").value;
             const titError = document.getElementById("title-error")
             const description = document.getElementById("description").value;
@@ -185,8 +186,8 @@
             const id = document.getElementById('id').value;
             const imgError = document.getElementById("image-error")
             const files = image ? image.files : null;
-
-
+            
+            
             console.log(files);
             if (title.trim() == "") {
                 titError.textContent = "Title is required!";
@@ -223,6 +224,9 @@
                 clearError(imgError, 2500);
                 return;
             }
+            
+                        button.disabled = true;
+                        button.textContent = 'Submitting...';
 
 
             const formData = new FormData();

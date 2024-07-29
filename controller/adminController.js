@@ -1,16 +1,31 @@
 const categoryModel = require("../models/category-model");
 const productModel = require("../models/product-model");
+const cloudinary = require("cloudinary").v2;
+const { Readable } = require("stream");
 
-const dotenv = require("dotenv").config();
-const fs = require("fs");
-const path = require("path");
+const uploadToCloudinary = (fileBuffer) => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { folder: "categories" },
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result.secure_url);
+        }
+      }
+    );
+    const stream = Readable.from(fileBuffer);
+    stream.pipe(uploadStream);
+  });
+};
 
 const loadAdminLogin = async (req, res) => {
   try {
     res.render("admin-login");
   } catch (error) {
     console.log(error);
-    res.status(500).render('500');
+    res.status(500).render("500");
   }
 };
 
@@ -27,7 +42,7 @@ const adminLogin = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(500).render('500');
+    res.status(500).render("500");
   }
 };
 
@@ -37,7 +52,7 @@ const loadCategory = async (req, res) => {
     res.render("category", { categories });
   } catch (error) {
     console.log(error);
-    res.status(500).render('500');
+    res.status(500).render("500");
   }
 };
 
@@ -46,31 +61,36 @@ const addCategory = async (req, res) => {
     res.render("add-category");
   } catch (error) {
     console.log(error);
-    res.status(500).render('500');
+    res.status(500).render("500");
   }
 };
-
 const addCategoryPost = async (req, res) => {
   try {
     const { title, description } = req.body;
-    const imageUrl = req.file;
+
+    const file = req.file;
+
+    const imageUrl = await uploadToCloudinary(file.buffer);
 
     const existingCategory = await categoryModel.findOne({
       title: { $regex: new RegExp(title, "i") },
     });
+
     if (existingCategory) {
-      return res.json({ exits: true });
+      return res.json({ exists: true });
     }
+
     const newCategory = new categoryModel({
       title,
       description,
-      imageUrl: imageUrl.filename,
+      imageUrl,
     });
     await newCategory.save();
+
     return res.json({ ok: true, message: "Category created successfully" });
   } catch (err) {
     console.error(err);
-    res.status(500).render('500');
+    res.status(500).render("500");
   }
 };
 
@@ -88,7 +108,7 @@ const deleteCategory = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(500).render('500');
+    res.status(500).render("500");
   }
 };
 
@@ -99,10 +119,13 @@ const categoryStatus = async (req, res) => {
       { _id: categoryId },
       { is_blocked: !isBlocked }
     );
-    await productModel.updateMany({ categoryId: categoryId }, { isCategoryBlocked: !isBlocked })
+    await productModel.updateMany(
+      { categoryId: categoryId },
+      { isCategoryBlocked: !isBlocked }
+    );
   } catch (error) {
     console.log(error);
-    res.status(500).render('500');
+    res.status(500).render("500");
   }
 };
 
@@ -112,7 +135,7 @@ const categoryEdit = async (req, res) => {
     let imageUrlToUpdate = null;
 
     if (req.file) {
-      imageUrlToUpdate = req.file.filename;
+      imageUrlToUpdate = await uploadToCloudinary(req.file.buffer);
     } else {
       const existingCategory = await categoryModel.findById(id);
       if (existingCategory) {
@@ -120,12 +143,14 @@ const categoryEdit = async (req, res) => {
       }
     }
 
-    await categoryModel.updateOne({ _id: id }, { title: title, description: description, imageUrl: imageUrlToUpdate });
+    await categoryModel.updateOne(
+      { _id: id },
+      { title: title, description: description, imageUrl: imageUrlToUpdate }
+    );
     res.json({ ok: true });
-
   } catch (error) {
     console.log(error);
-    res.status(500).render('500');
+    res.status(500).render("500");
   }
 };
 const adminLogout = async (req, res) => {
@@ -134,7 +159,7 @@ const adminLogout = async (req, res) => {
     res.redirect("/admin");
   } catch (error) {
     console.log(error);
-    res.status(500).render('500');
+    res.status(500).render("500");
   }
 };
 

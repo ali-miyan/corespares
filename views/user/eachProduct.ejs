@@ -176,12 +176,12 @@
 
                             <section class="productView-images" data-image-gallery>
                                 <figure class="productView-image" data-image-gallery-main
-                                    data-zoom-image="/public/sharpimages/<%=product.images[0]%>">
+                                    data-zoom-image="<%=product.images[0]%>">
                                     <a class="productView-image-main "
-                                        href="/public/sharpimages/<%=product.images[0]%>">
+                                        href="<%=product.images[0]%>">
                                         <img class="productView-image--default lazyload" data-sizes="auto"
                                             src="https://cdn11.bigcommerce.com/s-ghg2xirqxi/stencil/6cf4c2e0-5287-0136-ebbd-0242ac110003/e/a9dd6a80-5100-013a-01bd-72973fd6d5e0/img/loading.svg"
-                                            data-src="/public/sharpimages/<%=product.images[0]%>"
+                                            data-src="<%=product.images[0]%>"
                                             alt="Catlyn snake pilit" title="Catlyn snake pilit" data-main-image>
                                     </a>
 
@@ -191,15 +191,15 @@
                                             class="fa fa-search"></i> Click to zoom in</button>
                                 </div>
                                 <ul class="productView-thumbnails">
-                                    <% product.images.forEach(function(image, index) { %>
+                                <% product.images.forEach(function(image, index) { %>
                                         <li class="productView-thumbnail">
                                             <a class="productView-thumbnail-link  is-active "
-                                                href="/public/sharpimages/<%=image%>" data-image-gallery-item="0"
-                                                data-image-gallery-new-image-url="/public/sharpimages/<%=image%>"
-                                                data-image-gallery-zoom-image-url="/public/sharpimages/<%=image%>">
+                                                href="<%=image%>" data-image-gallery-item="0"
+                                                data-image-gallery-new-image-url="<%=image%>"
+                                                data-image-gallery-zoom-image-url="<%=image%>">
                                                 <img class="lazyload" data-sizes="auto"
-                                                    src="/public/sharpimages/<%=image%>"
-                                                    data-src="/public/sharpimages/<%=image%>" alt="loading..."
+                                                    src="<%=image%>"
+                                                    data-src="<%=image%>" alt="loading..."
                                                     title="Catlyn snake pilit">
                                             </a>
                                         </li>
@@ -220,7 +220,7 @@
 
                                         $('#btn-productViewzoom').magnificPopup({
                                             items: [
-                                                { src: "/public/sharpimages/<%=product.images[0]%>" },
+                                                { src: "<%=product.images[0]%>" },
                                             ],
                                             gallery: { enabled: true, preload: [0, 2] },
                                             type: 'image',

@@ -3,7 +3,7 @@ const adminRoute = express();
 const session = require("express-session");
 const admincontrollers = require("../controller/adminController");
 const productController = require("../controller/productController");
-const multer = require("../middleware/multer");
+const upload = require('../middleware/multer')
 const auth = require('../middleware/auth')
 
 
@@ -29,13 +29,13 @@ adminRoute.get("/add-category",auth.isLogin, admincontrollers.addCategory);
 adminRoute.delete("/delete-category",auth.isLogin, admincontrollers.deleteCategory);
 adminRoute.patch('/category-status', auth.isLogin,admincontrollers.categoryStatus)
 adminRoute.get('/admin-logout',admincontrollers.adminLogout)
-adminRoute.post("/add-categories",auth.isLogin,multer.uploadproduct,admincontrollers.addCategoryPost);
+adminRoute.post("/add-categories",auth.isLogin,upload.single('image'),admincontrollers.addCategoryPost);
 adminRoute.get("/products",auth.isLogin, productController.loadProducts);
 adminRoute.get("/add-products",auth.isLogin, productController.loadAddProducts);
-adminRoute.post("/add-product",auth.isLogin,multer.uploadMultiple, productController.addProductPost);
+adminRoute.post("/add-product",auth.isLogin,upload.array('images'), productController.addProductPost);
 adminRoute.get("/edit-product",auth.isLogin, productController.editProduct);
-adminRoute.post("/edit-products",auth.isLogin,multer.uploadMultiple, productController.editProductPost);
-adminRoute.post('/edit-categories',auth.isLogin,multer.uploadproduct ,admincontrollers.categoryEdit);
+adminRoute.post("/edit-products",auth.isLogin,upload.array('images'), productController.editProductPost);
+adminRoute.post('/edit-categories',auth.isLogin,upload.single('image') ,admincontrollers.categoryEdit);
 adminRoute.delete("/delete-product",auth.isLogin, productController.deleteProduct);
 adminRoute.patch('/product-status',auth.isLogin,productController.productStatus)
 

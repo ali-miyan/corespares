@@ -5,13 +5,19 @@ const noCache = require('nocache');
 require('dotenv').config();
 const Config=require('./config/config')
 Config.connectDB()
+const cloudinary = require("cloudinary").v2
 
 // Set up Express application
 const app = express();
 const port = 3009;
 
+cloudinary.config({
+  cloud_name:'dbr8upyh3',
+  api_key: '793931774182816',
+  api_secret: 'HRyisM1O6ItWdNU2x7Y6qtA_gb8',
+});
 
-// Set up static files and view engine
+
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 

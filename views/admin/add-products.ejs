@@ -41,8 +41,8 @@
                             </div>
                             <div class="mb-4">
                                 <label class="form-label">Features</label>
-                                <input placeholder="Type here" name="feature" id="feature" class="form-control"
-                                    rows="4"></input>
+                                <textarea placeholder="Type here" name="feature"  id="feature" class="form-control"
+                                    rows="4"></textarea>
                                 <span id="featureError" style="color: red;"></span>
                                 <p style="margin-top: 5px; font-size: 14px; color: #427db8;">
                                     • please ensure to include a hyphen (' - ') after each feature for the next line.
@@ -50,7 +50,7 @@
                             </div>
 
                             <div>
-                                <button type="button" onclick="submitProduct()"
+                                <button type="button" onclick="submitProduct(this)"
                                     class="btn btn-md rounded font-sm hover-up">Add</button>
                                 <button type="button" style="border: none; background: none;"> <a href="/admin/products"
                                         class="btn btn-md rounded font-sm hover-up">Back</a></button>
@@ -63,7 +63,7 @@
                     <label class="form-label">Choose a Category</label>
                     <select id="id_select2_example" style="max-width: 250px; max-height: 250px;" class="form-select">
                         <% categories.forEach(function(item) { %>
-                            <option value="<%= item._id%>" data-img_src="/public/categoryimages/<%= item.imageUrl%>">
+                            <option value="<%= item._id%>" data-img_src="<%= item.imageUrl%>">
                                 <%= item.title %>
                             </option>
                             <% }); %>
@@ -75,7 +75,7 @@
                     </div>
                     <div class="card-body">
                         <div class="input-upload">
-                            <input class="form-control" type="file" id="imageFile" name="image" multiple
+                            <input class="form-control" type="file" id="imageFile" name="images" multiple
                                 onchange="previewImages(this, 'previewImages')" />
                             <span style="color: red;" id="image-error"></span>
                         </div>
@@ -157,7 +157,8 @@
 
 
 
-        function submitProduct() {
+        function submitProduct(button) {
+            
             const title = document.getElementById("title").value;
             const titError = document.getElementById("title-error")
             const description = document.getElementById("description").value;
@@ -172,10 +173,10 @@
             const category = document.getElementById('id_select2_example').value;
             const imgError = document.getElementById("image-error")
             const files = image.files
-
-
+            
+            
             console.log(files);
-
+            
             if (title.trim() == "") {
                 titError.textContent = "Title is required!";
                 clearError(titError, 2500);
@@ -211,8 +212,10 @@
                 clearError(imgError, 2500);
                 return;
             }
-
-
+            
+            button.disabled = true;
+            button.textContent = 'Submitting...';
+            
             const formData = new FormData();
             formData.append('title', title);
             formData.append('description', description);
@@ -229,9 +232,9 @@
                 method: 'POST',
                 body: formData,
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.ok) {
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
                         Swal.fire({
                             title: "Success!",
                             text: "Product added successfully!",
