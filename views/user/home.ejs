@@ -245,24 +245,24 @@
                     </h5>                         
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         <% category.forEach(function(category) { %>
-                            <div class="border border-red-900 transition-transform transform hover:border-red-900 hover:shadow-lg hover:scale-105 duration-300 flex flex-col">
-                                <article class="flex flex-col h-full">
-                                    <div class="flex-1 p-3 flex items-center  justify-center">
-                                        <a href="/shop/<%=category._id%>" class="block">
-                                            <img class="w-48 h-48 object-contain lazyload transform transition-transform duration-300" 
-                                                 src="<%= category.imageUrl %>" 
-                                                 alt="<%= category.title %>" 
-                                                 title="<%= category.title %>" 
-                                                 loading="lazy">
-                                        </a>
-                                    </div>
-                                    <div class="p-4 text-center">
-                                        <h4 class="text-sm text-red-900 truncate">
-                                            <a href="/shop/<%=category._id%>" class="hover:underline"><%=category.title%></a>
-                                        </h4>
-                                    </div>
-                                </article>
-                            </div>
+                            <div class="border border-red-900 transition-transform cursor-pointer transform hover:border-red-900 hover:shadow-lg hover:scale-105 duration-300 flex flex-col" 
+                            onclick="window.location.href='/shop/<%=category._id%>'">
+                           <article class="flex flex-col h-full">
+                               <div class="flex-1 p-3 flex items-center justify-center">
+                                   <img class="w-48 h-48 object-contain lazyload transform transition-transform duration-300" 
+                                        src="<%= category.imageUrl %>" 
+                                        alt="<%= category.title %>" 
+                                        title="<%= category.title %>" 
+                                        loading="lazy">
+                               </div>
+                               <div class="p-4 text-center">
+                                   <h4 class="text-sm text-red-900 truncate">
+                                       <a href="/shop/<%=category._id%>" class="hover:underline"><%=category.title%></a>
+                                   </h4>
+                               </div>
+                           </article>
+                       </div>
+                       
                         <% }) %>
                     </div>
                 </div>

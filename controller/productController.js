@@ -63,7 +63,10 @@ const editProduct = async (req, res) => {
 
 const addProductPost = async (req, res) => {
   try {
-    const { title, description, price, quantity, category, feature } = req.body;
+    const { title, description, price, quantity, feature } = req.body;
+
+    const categoryIds = req.body.categoryIds.split(',');
+    
 
     // Ensure files are uploaded with multer before this function is called
     const files = req.files; // Array of files uploaded
@@ -129,18 +132,36 @@ const addProductPost = async (req, res) => {
       }
     }
 
-    // Create and save new product
-    const newProduct = new productModel({
-      name: title,
-      quantity: quantity,
-      price: price,
-      categoryId: category,
-      description: description,
-      features: feature,
-      images: imageUrls, // Store the URLs of the uploaded images
-    });
+    const createProducts = async () => {      
+      const productPromises = categoryIds.map((categoryId) => {
+        const newProduct = new productModel({
+          name: title,
+          quantity: quantity,
+          price: price,
+          categoryId: categoryId,
+          description: description,
+          features: feature,
+          images: imageUrls,
+        });
+        return newProduct.save();
+      });
+    
+      await Promise.all(productPromises);
+    };
 
-    await newProduct.save();
+    createProducts();
+
+    // const newProduct = new productModel({
+    //   name: title,
+    //   quantity: quantity,
+    //   price: price,
+    //   categoryId: category,
+    //   description: description,
+    //   features: feature,
+    //   images: imageUrls,
+    // });
+
+    // await newProduct.save();
     return res.json({ ok: true, message: "Product created successfully" });
   } catch (err) {
     console.error(err);

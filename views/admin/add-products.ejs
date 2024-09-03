@@ -59,16 +59,6 @@
                 </div>
             </div>
             <div class="col-lg-3">
-                <div class="mb-4">
-                    <label class="form-label">Choose a Category</label>
-                    <select id="id_select2_example" style="max-width: 250px; max-height: 250px;" class="form-select">
-                        <% categories.forEach(function(item) { %>
-                            <option value="<%= item._id%>" data-img_src="<%= item.imageUrl%>">
-                                <%= item.title %>
-                            </option>
-                            <% }); %>
-                    </select>
-                </div>
                 <div class="card mb-4">
                     <div class="card-header">
                         <h4>Media</h4>
@@ -83,6 +73,30 @@
                     </div>
 
                 </div>
+                <div class="mb-4">
+                    <label class="form-label text-gray-700 font-semibold">Choose Categories</label>
+                    <span style="color: red;" id="cat-error"></span>
+                    <div id="categoryCheckboxes" class="space-y-2 max-w-xs max-h-64 overflow-y-auto border border-gray-300 rounded p-2">
+                      <% categories.forEach(function(item) { %>
+                        <div class="flex items-center">
+                          <input 
+                            type="checkbox" 
+                            id="category-<%= item._id %>" 
+                            value="<%= item._id %>" 
+                            class="form-checkbox text-blue-500 h-4 w-4">
+                          
+                          <img src="<%= item.imageUrl %>" alt="<%= item.title %>" class="ml-2 h-12 w-20 object-contain rounded-md">
+                          
+                          <label for="category-<%= item._id %>" class="ml-2 text-gray-600">
+                            <%= item.title %>
+                          </label>
+                        </div>
+                      <% }); %>
+                    </div>
+                  </div>
+                  
+                  
+                
             </div>
             </form>
         </div>
@@ -155,9 +169,25 @@
             }
         }
 
+        function getSelectedCategories() {
+        const selectedCategories = [];
+        const checkboxes = document.querySelectorAll('#categoryCheckboxes input[type="checkbox"]:checked');
+        checkboxes.forEach((checkbox) => {
+            selectedCategories.push(checkbox.value);
+        });
+        return selectedCategories;
+        }
+
 
 
         function submitProduct(button) {
+
+            const selectedCategories = getSelectedCategories();
+
+            console.log(selectedCategories);
+            
+
+
             
             const title = document.getElementById("title").value;
             const titError = document.getElementById("title-error")
@@ -170,9 +200,10 @@
             const price = document.getElementById("price").value;
             const priceError = document.getElementById("price-error")
             const image = document.getElementById('imageFile');
-            const category = document.getElementById('id_select2_example').value;
             const imgError = document.getElementById("image-error")
+            const catError = document.getElementById("cat-error")
             const files = image.files
+            
             
             
             console.log(files);
@@ -202,6 +233,11 @@
                 clearError(featureError, 2500);
                 return;
             }
+            if (selectedCategories.length === 0) {
+                catError.textContent = "choose a brand";
+                clearError(catError, 2500);
+                return;
+            }
             if (image.files.length === 0) {
                 imgError.textContent = "Image is required!";
                 clearError(imgError, 2500);
@@ -222,7 +258,7 @@
             formData.append('feature', feature);
             formData.append('price', price);
             formData.append('quantity', quantity);
-            formData.append('category', category);
+            formData.append('categoryIds', selectedCategories);
             if (files.length > 0) {
                 for (let i = 0; i < files.length; i++) {
                     formData.append('images', files[i]);
