@@ -1,4 +1,29 @@
 <header class="header logo-content--left">
+  <style>
+    .loader {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .loader img {
+      width: 100px;
+    }
+
+    #content {
+      display: none;
+    }
+  </style>
+  <div id="loader" class="loader">
+    <img src="/public/f6656aa6fdb6b8f905dea0bcc2d71dd8.gif" alt="Loading..." />
+  </div>
   <div class="header-center">
     <div class="container">
       <div class="row justify-content-between">
@@ -16,7 +41,7 @@
                 max-width: 110px;
                 margin-top: -10px;
                 border: 0px solid #000;
-                box-shadow:0px 0px 4px rgb(0, 0, 0);
+                box-shadow: 0px 0px 4px rgb(0, 0, 0);
                 padding: 0px; /* Space between image and border */
                 display: flex;
                 align-items: center;
@@ -168,7 +193,12 @@
               <ul class="navUser-section">
                 <li class="navUser-item">
                   <a class="cart-button cart-button--wishlist" href="">
-                    <svg class="icon-heart-o" width="19" height="19">
+                    <svg
+                      class="icon-heart-o"
+                      style="margin-left: 8px"
+                      width="19"
+                      height="19"
+                    >
                       <use xlink:href="#icon-heart-o"></use>
                     </svg>
                   </a>
@@ -179,7 +209,12 @@
                     class="cart-button cart-button--primary"
                     data-options="align:left"
                   >
-                    <svg class="icon-shopping-cart" width="24" height="24">
+                    <svg
+                      class="icon-shopping-cart"
+                      style="margin-left: 7px"
+                      width="24"
+                      height="24"
+                    >
                       <use xlink:href="#icon-shopping-cart"></use>
                     </svg>
                     <span class="countPill cart-quantity">0</span>

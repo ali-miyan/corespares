@@ -25,32 +25,67 @@
     <!-- Bootstrap CSS -->
     <link
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    />            
+    />
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
-    <link href=
-    "https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
-              rel="stylesheet">
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css"
+    />
+    <link
+      href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+    <script>
+      window.addEventListener("load", function () {
+        var loader = document.getElementById("loader");
+        loader.style.display = "none";
 
+        var content = document.getElementById("content");
+        content.style.display = "block";
+      });
+    </script>
   </head>
 
   <body>
+    <style>
+      .loader {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+      }
+
+      .loader img {
+        width: 100px;
+      }
+
+      #content {
+        display: none;
+      }
+    </style>
+    <div id="loader" class="loader">
+      <img
+        src="/public/f6656aa6fdb6b8f905dea0bcc2d71dd8.gif"
+        alt="Loading..."
+      />
+    </div>
     <div class="screen-overlay"></div>
     <aside class="navbar-aside" id="offcanvas_aside">
       <div class="aside-top">
         <a class="brand-wrap">
-          <img
-            src="../public/CORE_LOGO[1].png"
-            class="logo"
-            alt="LOGO"
-          />
+          <img src="../public/CORE_LOGO[1].png" class="logo" alt="LOGO" />
         </a>
         <div>
           <button class="btn btn-icon btn-aside-minimize">
@@ -60,25 +95,25 @@
       </div>
       <nav>
         <ul class="menu-aside">
-          <li class="menu-item ">
-              <a class="menu-link" href="/admin/category">
-                  <i class="icon material-icons md-category"></i>
-                  <span class="text">Category</span>
-              </a>
+          <li class="menu-item">
+            <a class="menu-link" href="/admin/category">
+              <i class="icon material-icons md-category"></i>
+              <span class="text">Category</span>
+            </a>
           </li>
           <li class="menu-item active">
-              <a class="menu-link" href="/admin/products">
-                  <i class="icon material-icons md-shopping_bag"></i>
-                  <span class="text">Products</span>
-              </a>
+            <a class="menu-link" href="/admin/products">
+              <i class="icon material-icons md-shopping_bag"></i>
+              <span class="text">Products</span>
+            </a>
           </li>
           <li class="menu-item">
-              <a id="logout-link" class="menu-link" href="/admin/admin-logout">
-                  <i class="icon material-icons md-exit_to_app"></i>
-                  <span class="text">Logout </span>
-              </a>
+            <a id="logout-link" class="menu-link" href="/admin/admin-logout">
+              <i class="icon material-icons md-exit_to_app"></i>
+              <span class="text">Logout </span>
+            </a>
           </li>
-      </ul>  
+        </ul>
         <br />
         <br />
       </nav>
@@ -108,26 +143,29 @@
       </header>
 
       <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const logoutLink = document.getElementById('logout-link');
-        
-            if (logoutLink) {
-                logoutLink.addEventListener('click', function(event) {
-                    event.preventDefault(); 
-                    
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: 'You will be logged out!',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, logout!',
-                        cancelButtonText: 'Cancel'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = logoutLink.href; 
-                        }
-                    });
-                });
-            }
+        document.addEventListener("DOMContentLoaded", function () {
+          const logoutLink = document.getElementById("logout-link");
+
+          if (logoutLink) {
+            logoutLink.addEventListener("click", function (event) {
+              event.preventDefault();
+
+              Swal.fire({
+                title: "Are you sure?",
+                text: "You will be logged out!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, logout!",
+                cancelButtonText: "Cancel",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  window.location.href = logoutLink.href;
+                }
+              });
+            });
+          }
         });
-        </script>
+      </script>
+    </main>
+  </body>
+</html>
