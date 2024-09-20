@@ -139,7 +139,8 @@
 
                     <div class="heroCarousel-slide "
                         style="background-image: url(../../public/corePoster-02.jpg)">
-                        <a href=>
+                        <a onclick="smoothScroll('#shop-brand')"
+                        href="#shop-brand">
                             <img class="heroCarousel-image lazyload"
                                 src="../../public/corePoster-02.jpg"
                                 alt="" title="" />
@@ -147,7 +148,8 @@
                     </div>
                     <div class="heroCarousel-slide "
                         style="background-image: url(../../public/corePoster-02.jpg)">
-                        <a href=>
+                        <a onclick="smoothScroll('#shop-brand')"
+                        href="#shop-brand">
                             <img class="heroCarousel-image lazyload"
                                 src="../../public/corePoster-02.jpg"
                                 alt="" title="" />
@@ -155,7 +157,8 @@
                     </div>
                     <div class="heroCarousel-slide "
                         style="background-image: url(../../public/corePoster-02.jpg)">
-                        <a href=>
+                        <a onclick="smoothScroll('#shop-brand')"
+                        href="#shop-brand">
                             <img class="heroCarousel-image lazyload"
                                 src="../../public/corePoster-02.jpg"
                                 alt="" title="" />
@@ -454,10 +457,8 @@
 
 
                                                 <div class="action-item addToCart">
-                                                    <a href="cart.html?action=add&amp;product_id=130" data-addtocart
-                                                        data-product-id="130" data-wait-message="Add to Cart"
-                                                        class="action-link  button--cart" title="Add to Cart">Add to
-                                                        Cart</a>
+                                                    <a onclick="chat('<%= product.name %>')" 
+                                                        class="action-link  button--cart" >get product</a>
                                                 </div>
 
 
