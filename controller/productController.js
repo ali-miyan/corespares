@@ -74,9 +74,21 @@ const addProductPost = async (req, res) => {
     // Array to store image URLs
     const imageUrls = [];
 
+
     // Process and upload each image
     for (const file of files) {
+
+      console.log("Processing file:", file.originalname);
+      console.log("File MIME type:", file.mimetype);
+
+
       if (file.buffer) {
+
+
+        const metadata = await sharp(file.buffer).metadata();
+        console.log("Image metadata:", metadata);
+
+
         // Get dimensions of the image
         const dimensions = sizeOf(file.buffer);
         const { width, height } = dimensions;
@@ -165,8 +177,7 @@ const addProductPost = async (req, res) => {
     return res.json({ ok: true, message: "Product created successfully" });
   } catch (err) {
     console.error(err);
-    res.status(500).render('500');
-    return res.json({ ok: false, message: "Failed to create product" });
+    return res.status(500).render('500');
   }
 };
 const editProductPost = async (req, res) => {
@@ -179,6 +190,7 @@ const editProductPost = async (req, res) => {
 
       // Process and upload each image
       for (const file of files) {
+        
         if (file.buffer) {
           // Get dimensions of the image
           const dimensions = sizeOf(file.buffer);

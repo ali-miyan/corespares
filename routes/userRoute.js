@@ -16,6 +16,7 @@ userRoute.set("views", "./views/user");
 
 userRoute.get("/", userController.loadUserHome);
 userRoute.get("/shop/:id", userController.loadUserShop);
+userRoute.get("/shop", userController.loadUserProducts);
 userRoute.get("/product-details/:id", userController.loadProductDetails);
 
 

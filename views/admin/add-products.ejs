@@ -66,7 +66,7 @@
                     <div class="card-body">
                         <div class="input-upload">
                             <input class="form-control" type="file" id="imageFile" name="images" multiple
-                                onchange="previewImages(this, 'previewImages')" />
+                              accept="image/jpeg, image/png"  onchange="previewImages(this, 'previewImages')" />
                             <span style="color: red;" id="image-error"></span>
                         </div>
                         <div id="previewImages" style="margin-top: 10px;"></div>
@@ -138,11 +138,21 @@
             setTimeout(() => (element.textContent = ""), time);
         }
         function previewImages(input, previewId) {
+            const errorSpan = document.getElementById('image-error');
+            const allowedTypes = ['image/jpeg', 'image/png'];
             const preview = document.getElementById(previewId);
+            errorSpan.textContent = '';
             preview.innerHTML = '';
+
+
 
             if (input.files) {
                 [...input.files].forEach(file => {
+                    if (!allowedTypes.includes(file.type)) {
+                        errorSpan.textContent = 'Invalid file type. Please upload only JPEG or PNG images.';
+                        input.value = '';
+                        return;
+                    }
                     const reader = new FileReader();
                     reader.onload = function (e) {
                         const image = new Image();
@@ -287,7 +297,16 @@
                     }
                 })
                 .catch(error => {
+                    Swal.fire({
+                            title: "failed!",
+                            text: "something went wrong!",
+                            icon: "danger"
+                        })
                     console.error('Error fetching data:', error);
+
+                    button.disabled = false;
+            button.textContent = 'Add';
+
                 });
         }
     </script>
