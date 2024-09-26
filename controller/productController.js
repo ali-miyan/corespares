@@ -12,7 +12,7 @@ const { Readable } = require('stream');
 const uploadToCloudinary = (fileBuffer) => {
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
-      { folder: 'products' }, // Specify your folder name here
+      { folder: 'products' },
       (error, result) => {
         if (error) {
           reject(error);

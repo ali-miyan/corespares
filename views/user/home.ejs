@@ -432,7 +432,6 @@
                                                                 <use xlink:href="#icon-star" />
                                                             </svg>
                                                         </span>
-                                                        <!-- snippet location product_rating -->
 
                                                     </span>
                                                 </div>
@@ -457,28 +456,9 @@
 
 
                                                 <div class="action-item addToCart">
-                                                    <a onclick="chat('<%= product.name %>')" 
-                                                        class="action-link  button--cart" >get product</a>
+                                                    <a href="/product-details/<%= product._id %>"
+                                                        class="action-link  button--cart" >view product</a>
                                                 </div>
-
-
-                                                <div class="action-item wishlist">
-                                                    <form class="form"
-                                                        >
-                                                        <input type="hidden" name="variation_id" value="">
-                                                        <input class="button button--small card-figcaption-button"
-                                                            type="hidden" value="Add to Wish List">
-
-                                                        <button class="action-link button--wishlist" type="submit"
-                                                            title="Add to Wish List">
-                                                            <i class="fa fa-heart"></i>
-                                                        </button>
-                                                    </form>
-
-
-                                                </div>
-
-
                                             </div>
                                         </div>
                                     </article>
@@ -756,8 +736,7 @@
 		            }
 		        ]
 		    }'>
-
-
+                        
                         </div>
                     </div>
                 </div> -->

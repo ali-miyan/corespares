@@ -11731,7 +11731,7 @@ ul.navList-childList.is-open {
   background: #ea3a3c;
   margin-bottom: 20px;
 }
-@media only screen and (max-width: 992px) {
+@media only screen and (max-width: 800px) {
   body.open-sboff {
     height: 100%;
     overflow: hidden;
@@ -13420,7 +13420,7 @@ nav.navBar--sub ul.navBar-section li.navBar-item a {
   border-radius: 5px;
   margin: 10px;
 }
-@media (min-width: 801px) {
+@media (min-width: 815px) {
   .mobileMenu-toggle {
     display: none;
   }

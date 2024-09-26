@@ -1,5 +1,6 @@
 const categoryModel = require("../models/category-model");
 const productModel = require("../models/product-model");
+const mongoose = require("mongoose");
 
 const loadUserHome = async (req, res) => {
   try {
@@ -16,9 +17,16 @@ const loadUserShop = async (req, res) => {
   try {
     const id = req.params.id;
     let categoryName = "null";
-    const product = await productModel
-      .find({ categoryId: id, is_blocked: false })
-      .populate("categoryId");
+    let product;
+
+    if (id === "0") {
+      product = await productModel.find({ is_blocked: false }).populate("categoryId");
+    } else if (mongoose.Types.ObjectId.isValid(id)) {
+      product = await productModel.find({ categoryId: id, is_blocked: false }).populate("categoryId");
+    } else {
+      return res.status(400).send("Invalid category ID");
+    }
+
     if (product.length > 0) {
       categoryName = product[0].categoryId.title;
     }
@@ -31,6 +39,7 @@ const loadUserShop = async (req, res) => {
     res.status(500).render("500");
   }
 };
+
 const loadUserProducts = async (req, res) => {
   try {
     const productsPerPage = 9;

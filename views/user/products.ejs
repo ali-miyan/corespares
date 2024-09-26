@@ -75,55 +75,6 @@
                             </div>
                         </div>
 
-                        <div class="module">
-                            <h5 class="block-title">Shop By Price</h5>
-                            <div class="block-content clearfix">
-                                <ul class="navList">
-                                    <li class="navList-item">
-                                        <a class="navList-action "
-                                                                                       alt="$0.00 - $288.00" title="$0.00 - $288.00">$0.00 - $288.00</a>
-                                    </li>
-                                    <li class="navList-item">
-                                        <a class="navList-action "
-                                            
-                                            alt="$288.00 - $416.00" title="$288.00 - $416.00">$288.00 - $416.00</a>
-                                    </li>
-                                    <li class="navList-item">
-                                        <a class="navList-action "
-                                            
-                                            alt="$416.00 - $544.00" title="$416.00 - $544.00">$416.00 - $544.00</a>
-                                    </li>
-                                    <li class="navList-item">
-                                        <a class="navList-action "
-                                            
-                                            alt="$544.00 - $672.00" title="$544.00 - $672.00">$544.00 - $672.00</a>
-                                    </li>
-                                    <li class="navList-item">
-                                        <a class="navList-action "
-                                            
-                                            alt="$672.00 - $800.00" title="$672.00 - $800.00">$672.00 - $800.00</a>
-                                    </li>
-
-                                </ul>
-                            </div>
-                        </div>
-
-
-                        
-
-                        <div class="module sb-banner sb-banner--sidebarBanner ">
-                            <div class="block-content clearfix ">
-                                <div class="banners">
-                                    <div class="banner-figure">
-
-                                        <a href="#"><img class="img-fluid"
-                                                src="https://static.vecteezy.com/system/resources/previews/043/030/619/large_2x/sale-black-friday-banner-50-percent-off-with-pink-elements-design-free-vector.jpg"
-                                                alt=" " /></a>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
                     </nav>
                 </aside>
 
@@ -154,7 +105,7 @@
 
                                 </div>
                             </div>
-                            <div class="short-by-show col-sm-6 col-xs-12 ">
+                            <!-- <div class="short-by-show col-sm-6 col-xs-12 ">
                                 <div class="float-right actionBar-section">
                                     <div >
                                         <label class="form-label" for="sort">Sort By:</label>
@@ -171,7 +122,7 @@
                                     </div>
                                 </div>
 
-                            </div>
+                            </div> -->
                         </form>
 
                             <div class="products-list row">
@@ -182,7 +133,7 @@
                                         <div class="left-block d-flex align-items-center justify-content-center">
                                             <a href="/product-details/<%= product._id%>" class="product-item-photo">
                                                 <img class="img-responsive lazyload" data-sizes="auto"
-                                                    src="<%= product.images[0] %>"
+                                                    src="<%= [0] %>"
                                                     data-src="<%= product.images[0] %>"
                                                     alt="<%=product.name%>" title="<%=product.name%>">
                                             </a>
