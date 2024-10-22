@@ -7,7 +7,6 @@
     content.style.display = "block";
   });
 </script>
-<header class="header logo-content--left">
   <style>
     .loader {
       position: fixed;
@@ -29,42 +28,167 @@
     #content {
       display: none;
     }
+
+    @media (min-width: 1200px) {
+  .header-center .container {
+    max-width: 100%;
+    padding: 0 15px;
+  }
+  .row{
+    justify-content: space-between;
+  }
+  
+}
+
+@media (max-width: 991px) {
+  .header-logo-image-container {
+    max-width: 90px;
+  }
+
+  .row{
+    justify-content: center;
+  }
+
+  .header-bottom__search {
+    display: none;
+  }
+
+  .navPages-container {
+    display: none;
+  }
+
+  .mobileMenu-toggle {
+    display: block;
+  }
+}
+
+@media (max-width: 767px) {
+  .header-logo-image-container {
+    max-width: 80px;
+  }
+
+  .row{
+    display: flex;
+    justify-content: center;
+  }
+  .navbar-phone{
+    margin-top: 20px;
+  }
+
+  .header-bottom .row {
+    justify-content: space-between;
+  }
+
+  .header-bottom-right {
+    width: auto;
+  }
+}
+
+@media (max-width: 405px) {
+  .header-logo-image-container {
+    max-width: 70px;
+  }
+
+  .row{
+    display: flex;
+    justify-content: center;
+  }
+  .header-center .row {
+    justify-content: space-between;
+  }
+
+  .logo-container {
+    flex: 0 0 auto;
+    margin-left: 60px;
+    margin-bottom: -20px;
+  }
+
+  .navbar-container {
+    margin-left: -35px !important;
+  }
+
+  .navbar-phone {
+    display: block !important;
+  }
+
+  .navbar-phone__inner {
+    font-size: 0.8em;
+  }
+
+}
+@media (max-width: 465px) {
+  .header-logo-image-container {
+    max-width: 70px;
+  }
+
+  .row{
+    display: flex;
+    justify-content: center;
+  }
+  .header-center .row {
+    justify-content: space-between;
+  }
+
+  .logo-container {
+    flex: 0 0 auto;
+    margin-left: 60px;
+    margin-bottom: -20px;
+  }
+
+  .navbar-container {
+    display: block !important;
+  }
+
+  .navbar-phone {
+
+    display: block !important;
+    margin-left: 70px;
+  }
+
+  .navbar-phone__inner {
+    font-size: 0.8em;
+  }
+
+}
   </style>
+<header class="header logo-content--left">
   <div id="loader" class="loader">
     <img src="/public/f6656aa6fdb6b8f905dea0bcc2d71dd8.gif" alt="Loading..." />
   </div>
-  <div class="header-center">
+  <div class="header-center" style="margin-bottom: -17px;">
     <div class="container">
-      <div class="row justify-content-between">
+      <div class="row ">
         <div
-          class="col-lg-3 col-md-4 col-8 logo-container"
+          class="col-lg-3 col-md-6 col-2 col-8 logo-container"
           style="display: flex; align-items: center; justify-content: center"
         >
           <a
             class="header-logo"
             style="display: block; text-decoration: none; color: inherit"
           >
-            <div
-              class="header-logo-image-container"
-              style="
-                max-width: 110px;
-                margin-top: -10px;
-                padding: 0px; /* Space between image and border */
-                display: flex;
-                align-items: center;
-                justify-content: center;
-              "
-            >
-              <img
-                class="header-logo-image"
-                src="/public/CORE_LOGO_BLK[1].png"
-                alt="Ecommerce"
-                title="Ecommerce"
-                style="max-width: 100%; height: auto; object-fit: contain"
-              />
-            </div>
+          <div
+          class="header-logo-image-container"
+          style="
+            max-width: 110px;
+            margin-top: -10px;
+            padding: 0px; /* Space between image and border */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          "
+        >
+          <img
+            class="header-logo-image"
+            src="/public/CORE_LOGO_wbst-removebg-preview.png"
+            alt="Ecommerce"
+            title="Ecommerce"
+            style="max-width: 120%; height: auto; object-fit: contain"
+          />
+        </div>
+        
           </a>
         </div>
+        <i class="fa-solid fa-map-location-dot"></i>
 
         <div
           class="header-bottom__search collapsed-block col-xl-4 col-lg-5 col-md-8 col-4"
@@ -109,20 +233,22 @@
             </div>
           </div>
         </div>
-        <div
-          class="offset-xl-1 col-xl-4 col-lg-4 col-md-4 navbar-container d-none d-lg-block"
-        >
-          <div class="navbar-phone d-none d-sm-block">
-            <svg class="icon-headset_mic" width="40" height="40">
+        <div class="offset-xl-1 col-xl-3 col-12 col-lg-4 col-md-4 navbar-container">
+          <div class="navbar-phone d-none d-sm-block" style="display: flex; align-items: center;">
+            <svg class="icon-headset_mic" width="40" height="40" style="margin-right: 10px;">
               <use xlink:href="#icon-headset_mic"></use>
             </svg>
-            <div class="navbar-phone__inner">
-              <strong>Call us now : </strong>
-              <span class="phone">(+91)&nbsp;&nbsp;8075003693</span> <br />
-              <span> Email : </span>
-              <a href="mailto:Coremarketingcalicut@gmail.com">
-                Coremarketingcalicut@gmail.com</a
-              >
+            <div class="navbar-phone__inner" style="flex-grow: 1; min-width: 0;">
+              <div style="white-space: nowrap;">
+                <strong>Call us now : </strong>
+                <span class="phone">(+91)&nbsp;&nbsp;8075003693</span>
+              </div>
+              <div style="white-space: nowrap;">
+                <span>Email : </span>
+                <a href="mailto:Coremarketingcalicut@gmail.com" style="display: inline-block;">
+                  Coremarketingcalicut@gmail.com
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -134,7 +260,7 @@
     <div class="container">
       <div class="row align-items-center">
         <div class="header-bottom-right col-lg-12 col-md-12 col-12">
-          <div class="row">
+          <div class="row ">
             <div class="col-xl-10 col-lg-10 col-sm-8 col-4">
               <nav class="navPages-horizontal navPages-container" id="menu">
                 <span class="mobileMenu-close fa fa-times"></span>
@@ -174,6 +300,14 @@
                 <span class="mobileMenu-toggleIcon">Toggle menu</span>
               </a>
             </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
 
             <!-- <div
               class="header-bottom__cart col-xl-2 col-lg-2 col-sm-4 col-8 text-right"
@@ -216,9 +350,3 @@
                 </li>
               </ul>
             </div> -->
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</header>

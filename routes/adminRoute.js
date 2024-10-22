@@ -15,11 +15,9 @@ adminRoute.use(
   })
 );
 
-// Parse JSON and URL-encoded data
 adminRoute.use(express.json());
 adminRoute.use(express.urlencoded({ extended: true }));
 
-// Set the view engine and views directory
 adminRoute.set("views", "./views/admin");
 
 adminRoute.get("/",auth.isLogout, admincontrollers.loadAdminLogin);

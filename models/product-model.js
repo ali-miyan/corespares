@@ -1,44 +1,43 @@
-const mongoose = require('mongoose');
-const ObjectId = mongoose.Schema.Types.ObjectId
+const mongoose = require("mongoose");
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const productSchema = mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   quantity: {
     type: Number,
-    required: true
+    required: true,
   },
   categoryId: {
     type: ObjectId,
-    ref: 'categoryModel',
-    required: true
+    ref: "categoryModel",
+    required: true,
   },
   price: {
     type: Number,
-    required: true
+    required: true,
   },
   description: {
     type: String,
-    required: true
+    required: true,
   },
-  features:{
+  features: {
     type: String,
-    required: true
+    required: true,
   },
-  images:[],
+  images: [],
   is_blocked: {
     type: Boolean,
     default: false,
-    required: true
+    required: true,
   },
   isCategoryBlocked: {
     type: Boolean,
     default: false,
-  }
+  },
 });
 
-
 const Product = mongoose.model("Product", productSchema);
-module.exports = Product
+module.exports = Product;

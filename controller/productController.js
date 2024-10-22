@@ -68,14 +68,11 @@ const addProductPost = async (req, res) => {
     const categoryIds = req.body.categoryIds.split(',');
     
 
-    // Ensure files are uploaded with multer before this function is called
-    const files = req.files; // Array of files uploaded
+    const files = req.files;
 
-    // Array to store image URLs
     const imageUrls = [];
 
 
-    // Process and upload each image
     for (const file of files) {
 
       console.log("Processing file:", file.originalname);
@@ -89,13 +86,11 @@ const addProductPost = async (req, res) => {
         console.log("Image metadata:", metadata);
 
 
-        // Get dimensions of the image
         const dimensions = sizeOf(file.buffer);
         const { width, height } = dimensions;
         
         let canvasWidth, canvasHeight;
 
-        // Determine canvas size based on image dimensions
         if (width < 200 && height > 500) {
           canvasWidth = 900;
           canvasHeight = 750;
@@ -116,29 +111,22 @@ const addProductPost = async (req, res) => {
           canvasHeight = 1200;
         }
 
-        // Load image
         const image = await loadImage(file.buffer);
 
-        // Create canvas and draw the image
         const canvas = createCanvas(canvasWidth, canvasHeight);
         const ctx = canvas.getContext('2d');
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Calculate position to center image
         const x = (canvas.width - image.width) / 2;
         const y = (canvas.height - image.height) / 2;
 
-        // Draw image onto canvas
         ctx.drawImage(image, x, y);
 
-        // Convert canvas to buffer
         const buffer = canvas.toBuffer('image/jpeg');
 
-        // Use Sharp to process the image further (if needed)
         const processedBuffer = await sharp(buffer).toBuffer();
 
-        // Upload the processed image to Cloudinary
         const imageUrl = await uploadToCloudinary(processedBuffer);
         imageUrls.push(imageUrl);
       }
@@ -163,17 +151,6 @@ const addProductPost = async (req, res) => {
 
     createProducts();
 
-    // const newProduct = new productModel({
-    //   name: title,
-    //   quantity: quantity,
-    //   price: price,
-    //   categoryId: category,
-    //   description: description,
-    //   features: feature,
-    //   images: imageUrls,
-    // });
-
-    // await newProduct.save();
     return res.json({ ok: true, message: "Product created successfully" });
   } catch (err) {
     console.error(err);
@@ -186,20 +163,17 @@ const editProductPost = async (req, res) => {
     let imageUrls = [];
 
     if (req.files && req.files.length > 0) {
-      const files = req.files; // Array of uploaded files
+      const files = req.files;
 
-      // Process and upload each image
       for (const file of files) {
         
         if (file.buffer) {
-          // Get dimensions of the image
           const dimensions = sizeOf(file.buffer);
           const { width, height } = dimensions;
           console.log(width, height);
 
           let canvasWidth, canvasHeight;
 
-          // Determine canvas size based on image dimensions
           if (width < 200 && height > 500) {
             canvasWidth = 900;
             canvasHeight = 750;
@@ -220,42 +194,33 @@ const editProductPost = async (req, res) => {
             canvasHeight = 1200;
           }
 
-          // Load image
           const image = await loadImage(file.buffer);
 
-          // Create canvas and draw the image
           const canvas = createCanvas(canvasWidth, canvasHeight);
           const ctx = canvas.getContext('2d');
           ctx.fillStyle = '#ffffff';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-          // Calculate position to center image
           const x = (canvas.width - image.width) / 2;
           const y = (canvas.height - image.height) / 2;
 
-          // Draw image onto canvas
           ctx.drawImage(image, x, y);
 
-          // Convert canvas to buffer
           const buffer = canvas.toBuffer('image/jpeg');
 
-          // Use Sharp to process the image further (if needed)
           const processedBuffer = await sharp(buffer).toBuffer();
 
-          // Upload the processed image to Cloudinary
           const imageUrl = await uploadToCloudinary(processedBuffer);
           imageUrls.push(imageUrl);
         }
       }
     } else {
-      // If no new files, use existing images
       const existingProduct = await productModel.findById(id);
       if (existingProduct) {
         imageUrls = existingProduct.images;
       }
     }
 
-    // Update the product with new details
     const updatedProduct = await productModel.findByIdAndUpdate(
       id,
       {
@@ -265,7 +230,7 @@ const editProductPost = async (req, res) => {
         categoryId: category,
         description: description,
         features: feature,
-        images: imageUrls, // Update images with new URLs
+        images: imageUrls,
       },
       { new: true }
     );

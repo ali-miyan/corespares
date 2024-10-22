@@ -1,27 +1,84 @@
 <footer class="footer" role="contentinfo">
+  <style>
+    .core_footer-center {
+      background-color: #0000; /* Light background for the footer */
+      padding: 40px 0; /* Padding on the top and bottom */
+    }
 
+    .core_footer-info-heading {
+      color: white;
+      font-size: 1.5rem; /* Adjust heading size */
+      margin-bottom: 45px; /* Space below heading */
+    }
 
-  <section class="footer-center">
+    .core_footer-info-list {
+      display: flex;
+      justify-content: space-around;
+      align-items: baseline;
+      gap: 75px;
+    }
+
+    address {
+      font-weight: bolder;
+      font-style: normal; /* Remove default styling */
+      text-align: center; /* Center text in each address */
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 1200px) {
+      .core_footer-info-list {
+        gap: 70px; /* Reduce gap on larger tablets */
+      }
+    }
+
+    @media (max-width: 992px) {
+      .core_footer-info-list {
+        flex-direction: column; /* Stack vertically on medium devices */
+        gap: 50px; /* Space between stacked items */
+      }
+    }
+
+    @media (max-width: 768px) {
+      .core_footer-info-heading {
+        font-size: 1.25rem; /* Smaller heading size for mobile */
+      }
+
+      .core_footer-info-list {
+        gap: 0px; /* Reduce gap on mobile */
+      }
+    }
+
+    @media (max-width: 576px) {
+      address {
+        font-size: 0.9rem; /* Smaller text for very small devices */
+      }
+    }
+  </style>
+  <section class="core_footer-center">
     <div class="footer-center__first">
       <div class="container">
         <div class="row justify-content-center">
           <article
-            class="col-xl-12 footer-info align-items-center"
+            class="col-xl-12 col-lg-10 col-md-8 col-sm-6 footer-info align-items-center"
             data-section-type="storeInfo"
           >
-            <h5 class="footer-info-heading text-center">Contact Us</h5>
-            <div class="footer-info-list text-center" 
-            style="display: flex; justify-content: center;gap: 70px;">
+            <h5 class="core_footer-info-heading text-center">Contact Us</h5>
+            <div
+              class="core_footer-info-list text-center"
+              style="display: flex; justify-content: center;"
+            >
               <address>
                 <i class="fa fa-map-marker"></i> Addresses : something...
               </address>
-  
+
               <address>
                 <i class="fa fa-phone"></i> Call us now : (+91) 8075003693
               </address>
               <address>
                 <i class="fa fa-envelope"></i>
-                Email : <a href="mailto:Coremarketingcalicut@gmail.com">Coremarketingcalicut@gmail.com</a>
+                <a href="mailto:Coremarketingcalicut@gmail.com"
+                  >Coremarketingcalicut@gmail.com</a
+                >
               </address>
             </div>
           </article>
@@ -29,8 +86,6 @@
       </div>
     </div>
   </section>
-  
-  
 
   <section class="footer-bottom">
     <div class="container">
@@ -40,8 +95,6 @@
             © 2024 Core Spares. All rights reserved.
           </span>
         </div>
-
-
 
         <div class="footer-geotrust-ssl-seal">
           <table
